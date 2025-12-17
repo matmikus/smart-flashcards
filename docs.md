@@ -13,7 +13,7 @@ Estimated Total Hours: ~110–125 hours
 Week 1: Project Setup, Pages, Layouts, Routing
 
 Task 1 – Project Setup
-• Description: Initialize Nuxt 3 project with TypeScript, TailwindCSS, ESLint, Prettier, Husky. Configure Vite, .env for API keys (AI, backend), VS Code recommended extensions.
+• Description: Initialize Nuxt 4 project with TypeScript, TailwindCSS, ESLint, Prettier, Husky. Configure Vite, .env for API keys (AI, backend), VS Code recommended extensions.
 • Estimation: 2–3 hours
 • Concepts: Modern tooling, TypeScript setup, project scaffolding
 

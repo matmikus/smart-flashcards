@@ -1,12 +1,37 @@
 {
-  "name": "smart-flashcards",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "smart-flashcards",
+	"type": "module",
+	"private": true,
+	"packageManager": "pnpm@10.26.0",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"typecheck": "nuxt typecheck",
+		"prepare": "husky"
+	},
+	"dependencies": {
+		"@nuxt/eslint": "1.12.1",
+		"@nuxt/test-utils": "3.21.0",
+		"eslint": "^9.39.2",
+		"nuxt": "^4.2.2",
+		"vue": "^3.5.25",
+		"vue-router": "^4.6.4"
+	},
+	"devDependencies": {
+		"@nuxtjs/tailwindcss": "^6.14.0",
+		"autoprefixer": "^10.4.23",
+		"eslint-config-prettier": "^10.1.8",
+		"husky": "^9.1.7",
+		"postcss": "^8.5.6",
+		"prettier": "^3.7.4",
+		"tailwindcss": "^3.4.19",
+		"vite-plugin-eslint2": "^5.0.4"
+	}
 }
