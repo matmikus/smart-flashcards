@@ -12,12 +12,12 @@ Estimated Total Hours: ~110–125 hours
 
 Week 1: Project Setup, Pages, Layouts, Routing
 
-Task 1 – Project Setup
+√ Task 1 – Project Setup
 • Description: Initialize Nuxt 4 project with TypeScript, TailwindCSS, ESLint, Prettier, Husky. Configure Vite, .env for API keys (AI, backend), VS Code recommended extensions.
 • Estimation: 2–3 hours
 • Concepts: Modern tooling, TypeScript setup, project scaffolding
 
-Task 2 – Pages & Routing
+√ Task 2 – Pages & Routing
 • Description: Create pages: Dashboard (all sets), Login/Register, Flashcard Set Detail (/sets/[id]), Learning Mode, Stats. Use dynamic & nested routes, feature-based structure (features/sets, features/auth).
 • Estimation: 4 hours
 • Concepts: Nuxt routing, feature-based architecture, dynamic routes

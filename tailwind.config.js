@@ -9,7 +9,12 @@ export default {
 		'./error.vue',
 	],
 	theme: {
-		extend: {},
+		extend: {
+			fontFamily: {
+				'space-grotesk': ['Space Grotesk', 'sans-serif'],
+				'bbh-bartle': ['Bbh Bartle', 'sans-serif'],
+			},
+		},
 	},
 	plugins: [],
 }
