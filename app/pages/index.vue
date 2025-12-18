@@ -1,8 +1,15 @@
 <template>
 	<div>
 		<div class="flex justify-between items-center mb-4">
-			<h1 class="mb-4">Your Sets</h1>
-			<button class="bg-indigo-500 text-indigo-100 p-2 rounded-md" @click="createNewSet">
+			<h1
+				class="mb-4 text-white font-bold text-2xl drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+			>
+				Your Sets
+			</h1>
+			<button
+				class="bg-purple-500 text-white p-2 rounded-md font-semibold shadow-lg shadow-purple-500/50 hover:shadow-purple-400/50 hover:bg-purple-400 transition-all border border-purple-400/50"
+				@click="createNewSet"
+			>
 				Create New Set
 			</button>
 		</div>
@@ -22,6 +29,7 @@
 		{
 			id: 1,
 			name: 'JavaScript Core',
+			color: 0,
 			flashcards: [
 				'var',
 				'let',
@@ -38,6 +46,7 @@
 		{
 			id: 2,
 			name: 'TypeScript',
+			color: 1,
 			flashcards: [
 				'interface',
 				'type',
@@ -53,6 +62,7 @@
 		{
 			id: 3,
 			name: 'Vue.js / Nuxt.js',
+			color: 2,
 			flashcards: [
 				'v-if',
 				'v-else',
@@ -69,6 +79,7 @@
 		{
 			id: 4,
 			name: 'React.js',
+			color: 3,
 			flashcards: [
 				'useState',
 				'useEffect',
@@ -85,6 +96,7 @@
 		{
 			id: 5,
 			name: 'Node.js',
+			color: 4,
 			flashcards: [
 				'require',
 				'module',

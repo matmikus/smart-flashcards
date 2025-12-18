@@ -14,7 +14,7 @@
 		title="Set Settings"
 		@update:model-value="closeModal"
 	>
-		<SetSettings :set="modalState.props?.set" />
+		<SetSettings :set="set" />
 	</AppModal>
 
 	<AppModal
@@ -23,33 +23,37 @@
 		title="Set Statistics"
 		@update:model-value="closeModal"
 	>
-		<SetStats :set="modalState.props?.set" />
+		<SetStats :set="set" />
 	</AppModal>
 </template>
 
 <script setup lang="ts">
-const { modalState, closeModal } = useModal()
+	import type { Set } from '@/types'
 
-const isCreateSetOpen = computed({
-	get: () => modalState.value.type === 'create-set',
-	set: () => closeModal(),
-})
+	const { modalState, closeModal } = useModal()
 
-const isSetSettingsOpen = computed({
-	get: () => modalState.value.type === 'set-settings',
-	set: () => closeModal(),
-})
+	const set = computed(() => modalState.value.props?.set as Set)
 
-const isSetStatsOpen = computed({
-	get: () => modalState.value.type === 'set-stats',
-	set: () => closeModal(),
-})
+	const isCreateSetOpen = computed({
+		get: () => modalState.value.type === 'create-set',
+		set: () => closeModal(),
+	})
 
-// Debug: log modal state changes
-watch(
-	() => modalState.value.type,
-	(newType) => {
-		console.log('Modal type changed:', newType)
-	}
-)
+	const isSetSettingsOpen = computed({
+		get: () => modalState.value.type === 'set-settings',
+		set: () => closeModal(),
+	})
+
+	const isSetStatsOpen = computed({
+		get: () => modalState.value.type === 'set-stats',
+		set: () => closeModal(),
+	})
+
+	// Debug: log modal state changes
+	watch(
+		() => modalState.value.type,
+		(newType) => {
+			console.log('Modal type changed:', newType)
+		}
+	)
 </script>

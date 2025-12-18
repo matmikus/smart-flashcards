@@ -23,39 +23,35 @@
 				>
 					<div
 						v-if="modelValue"
-						class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto relative"
+						class="bg-slate-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto relative"
 						@click.stop
 					>
-						<div class="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10">
-							<slot name="header">
-								<h2 v-if="title" class="text-xl font-bold text-gray-900">
-									{{ title }}
-								</h2>
-							</slot>
-							<button
-								@click="$emit('update:modelValue', false)"
-								class="text-gray-400 hover:text-gray-600 transition-colors ml-4"
-								aria-label="Close modal"
+						<button
+							class="absolute top-0 right-0 p-3 text-gray-400 hover:text-gray-100 transition-colors ml-4"
+							aria-label="Close modal"
+							@click="$emit('update:modelValue', false)"
+						>
+							<svg
+								class="w-6 h-6"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
 							>
-								<svg
-									class="w-6 h-6"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M6 18L18 6M6 6l12 12"
-									/>
-								</svg>
-							</button>
-						</div>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M6 18L18 6M6 6l12 12"
+								/>
+							</svg>
+						</button>
 						<div class="p-4">
 							<slot />
 						</div>
-						<div v-if="$slots.footer" class="p-4 border-t sticky bottom-0 bg-white">
+						<div
+							v-if="$slots.footer"
+							class="p-4 border-t sticky bottom-0 bg-white"
+						>
 							<slot name="footer" />
 						</div>
 					</div>
@@ -66,12 +62,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-	modelValue: boolean
-	title?: string
-}>()
+	defineProps<{
+		modelValue: boolean
+		title?: string
+	}>()
 
-defineEmits<{
-	'update:modelValue': [value: boolean]
-}>()
+	defineEmits<{
+		'update:modelValue': [value: boolean]
+	}>()
 </script>
