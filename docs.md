@@ -22,7 +22,7 @@ Week 1: Project Setup, Pages, Layouts, Routing
 • Estimation: 4 hours
 • Concepts: Nuxt routing, feature-based architecture, dynamic routes
 
-Task 3 – Layouts & Slots
+√ Task 3 – Layouts & Slots
 • Description: Dashboard layout: header, sidebar (sets list), main content. Login layout simpler. Use slots for modals, AI explanation panels, quiz UI.
 • Estimation: 2 hours
 • Concepts: Layouts, slots, reusable UI, responsive design

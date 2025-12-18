@@ -18,5 +18,6 @@
 				<slot />
 			</div>
 		</main>
+		<AppModalContainer />
 	</div>
 </template>

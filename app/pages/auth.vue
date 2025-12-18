@@ -12,8 +12,8 @@
 					>Email</label
 				>
 				<input
-					type="email"
 					id="email"
+					type="email"
 					class="w-full p-2 rounded-md bg-indigo-700 text-indigo-100"
 				/>
 			</div>
@@ -22,8 +22,8 @@
 					>Password</label
 				>
 				<input
-					type="password"
 					id="password"
+					type="password"
 					class="w-full p-2 rounded-md bg-indigo-700 text-indigo-100"
 				/>
 			</div>
