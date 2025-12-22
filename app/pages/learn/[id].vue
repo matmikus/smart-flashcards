@@ -1,3 +1,6 @@
 <template>
-	<h1>Learn page</h1>
+	<div>
+		<LearningHeader class="mb-4" />
+		<LearningCard />
+	</div>
 </template>

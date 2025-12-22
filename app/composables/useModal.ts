@@ -1,4 +1,4 @@
-export type ModalType = 'create-set' | 'set-settings' | 'set-stats' | null
+export type ModalType = 'create-set' | 'set-settings' | 'set-deletion' | null
 
 export interface ModalState {
 	type: ModalType

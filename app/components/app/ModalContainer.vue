@@ -18,12 +18,12 @@
 	</AppModal>
 
 	<AppModal
-		v-if="isSetStatsOpen"
-		v-model="isSetStatsOpen"
-		title="Set Statistics"
+		v-if="isSetDeletionOpen"
+		v-model="isSetDeletionOpen"
+		title="Set Deletion"
 		@update:model-value="closeModal"
 	>
-		<SetStats :set="set" />
+		<SetDeletion :set="set" />
 	</AppModal>
 </template>
 
@@ -44,8 +44,8 @@
 		set: () => closeModal(),
 	})
 
-	const isSetStatsOpen = computed({
-		get: () => modalState.value.type === 'set-stats',
+	const isSetDeletionOpen = computed({
+		get: () => modalState.value.type === 'set-deletion',
 		set: () => closeModal(),
 	})
 

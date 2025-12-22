@@ -19,6 +19,7 @@
 				cardColor.buttonBg,
 				cardColor.buttonShadow,
 			]"
+			@click="openSetLearning"
 		>
 			🚀 Start Learning
 		</button>
@@ -26,7 +27,6 @@
 			<button
 				:class="[
 					'w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white mt-4 mr-4 hover:bg-slate-700 transition-colors border border-white/10',
-					cardColor.buttonShadow,
 				]"
 				@click="openSetSettings"
 			>
@@ -35,11 +35,10 @@
 			<button
 				:class="[
 					'w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white ml-4 mt-4 hover:bg-slate-700 transition-colors border border-white/10',
-					cardColor.buttonShadow,
 				]"
-				@click="openSetStats"
+				@click="openSetDeletion"
 			>
-				📈
+				🗑️
 			</button>
 		</div>
 	</div>
@@ -59,11 +58,15 @@
 		openModal('set-settings', { set: props.set })
 	}
 
-	const openSetStats = () => {
-		openModal('set-stats', { set: props.set })
+	const openSetDeletion = () => {
+		openModal('set-deletion', { set: props.set })
 	}
 
 	const cardColor = computed(() => {
 		return cardColors[props.set.color]!
 	})
+
+	const openSetLearning = () => {
+		navigateTo(`/learn/${props.set.id}`)
+	}
 </script>

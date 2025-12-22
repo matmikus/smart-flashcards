@@ -31,7 +31,7 @@ Week 1: Project Setup, Pages, Layouts, Routing
 
 Week 2: Frontend Components, State, SSR
 
-Task 4 – Reusable UI Components
+√ Task 4 – Reusable UI Components
 • Description: Build components: Flashcard, Button, Modal, InputField, RadioGroup (multiple-choice), ProgressBar. TypeScript props and emits, scoped slots.
 • Estimation: 4 hours
 • Concepts: Component design, TypeScript props/emits, reusable UI
