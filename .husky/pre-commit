@@ -1,3 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Stash unstaged changes
+git stash -k -u
+
+# Run lint fix and format
 pnpm lint:fix
 pnpm format
 pnpm typecheck
+
+# Stage the fixed files
+git add -A
+
+# Restore unstaged changes
+git stash pop || true
