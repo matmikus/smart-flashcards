@@ -69,3 +69,4 @@
 		return icons[props.toast.type] || icons.info
 	})
 </script>
+

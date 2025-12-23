@@ -10,8 +10,8 @@ export const useUserStore = defineStore('user', {
 	}),
 
 	getters: {
-		userAiApiKey: (state) => state.userAiApiKey,
-		userName: (state) => state.userName,
+		getUserAiApiKey: (state) => state.userAiApiKey,
+		getUserName: (state) => state.userName,
 	},
 
 	actions: {
@@ -20,6 +20,12 @@ export const useUserStore = defineStore('user', {
 			this.userId = userData.id
 			this.userAiApiKey = userData.key
 			this.userName = userData.name
+		},
+
+		setOpenaiApiKey(key: string) {
+			this.userAiApiKey = key
+			console.log('setOpenaiApiKey', key)
+			console.log('setOpenaiApiKey', this.userAiApiKey)
 		},
 
 		logout() {

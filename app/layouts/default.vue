@@ -10,13 +10,10 @@
 			</NuxtLink>
 			<p>Your AI-powered flashcard learning companion</p>
 			<div
-				ref="userMenu.containerRef"
 				class="relative flex-1 flex justify-end text-4xl m-[-8px] px-2"
 			>
-				<div class="text-4xl cursor-pointer" @click="userMenu.toggle">
-					👨🏻‍💼
-				</div>
-				<AppUserDropdown />
+				<div class="text-4xl cursor-pointer" @click="userMenu.toggle">👨🏻‍💼</div>
+				<AppUserDropdown v-if="userMenu.isOpen" />
 			</div>
 		</header>
 		<main class="text-white p-4 flex justify-center items-center flex-1">

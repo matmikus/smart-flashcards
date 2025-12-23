@@ -17,3 +17,4 @@
 <script setup lang="ts">
 	const { toasts, removeToast } = useToast()
 </script>
+

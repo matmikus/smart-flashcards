@@ -52,6 +52,10 @@
 		set: Set
 	}>()
 
+	const cardColor = computed(() => {
+		return cardColors[props.set.color]!
+	})
+
 	const { openModal } = useModal()
 
 	const openSetSettings = () => {
@@ -61,10 +65,6 @@
 	const openSetDeletion = () => {
 		openModal('set-deletion', { set: props.set })
 	}
-
-	const cardColor = computed(() => {
-		return cardColors[props.set.color]!
-	})
 
 	const openSetLearning = () => {
 		navigateTo(`/learn/${props.set.id}`)
