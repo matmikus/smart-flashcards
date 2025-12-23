@@ -35,11 +35,11 @@
 
 <script setup lang="ts">
 	const userMenu = useUserMenu()
-	const openaiApiKey = ref('')
 	const userStore = useUserStore()
+	const openaiApiKey = ref(userStore.getUserAiApiKey)
 
 	const saveOpenaiApiKey = () => {
-		userStore.setOpenaiApiKey(openaiApiKey.value)
+		userStore.setOpenaiApiKey(openaiApiKey.value || '')
 		userMenu.toggle()
 	}
 

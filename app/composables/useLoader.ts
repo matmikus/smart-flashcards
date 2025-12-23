@@ -42,4 +42,3 @@ export const useLoader = () => {
 		isLoading: computed(() => loaderState.value.isLoading),
 	}
 }
-

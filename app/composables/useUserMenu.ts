@@ -5,8 +5,13 @@ export const useUserMenu = () => {
 		isOpen.value = !isOpen.value
 	}
 
+	const close = () => {
+		isOpen.value = false
+	}
+
 	return {
 		isOpen: readonly(isOpen),
 		toggle,
+		close,
 	}
 }

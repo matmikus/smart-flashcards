@@ -10,9 +10,15 @@
 			</NuxtLink>
 			<p>Your AI-powered flashcard learning companion</p>
 			<div
+				v-click-outside="handleClickOutside"
 				class="relative flex-1 flex justify-end text-4xl m-[-8px] px-2"
 			>
-				<div class="text-4xl cursor-pointer" @click="userMenu.toggle">👨🏻‍💼</div>
+				<div
+					class="text-4xl cursor-pointer select-none"
+					@click="userMenu.toggle"
+				>
+					👨🏻‍💼
+				</div>
 				<AppUserDropdown v-if="userMenu.isOpen" />
 			</div>
 		</header>
@@ -29,4 +35,10 @@
 
 <script setup lang="ts">
 	const userMenu = useUserMenu()
+
+	const handleClickOutside = () => {
+		if (userMenu.isOpen.value) {
+			userMenu.close()
+		}
+	}
 </script>
