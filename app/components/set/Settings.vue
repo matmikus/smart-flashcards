@@ -107,11 +107,11 @@
 			...localSet.value,
 			flashcards: localSet.value.flashcards.filter((item) => item.trim()),
 		}
-		
+
 		setStore.updateSet(props.set.id, parsedSet).then(() => {
 			closeModal()
 		})
-	}	
+	}
 
 	const addItem = () => {
 		localSet.value.flashcards.push('')

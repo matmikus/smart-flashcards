@@ -35,7 +35,7 @@ export const useSetsStore = defineStore('sets', {
 			const { startLoading, stopLoading } = useLoader()
 
 			startLoading('save')
-			this.sets = this.sets.map((s) => s.id === id ? set : s)
+			this.sets = this.sets.map((s) => (s.id === id ? set : s))
 
 			// TODO: Implement actual API call to update the set
 			await new Promise((resolve) => setTimeout(resolve, 1000))

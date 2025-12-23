@@ -204,13 +204,13 @@
 			return
 		}
 
-				const validItems = formData.items.filter((item) => item.trim())
-				if (validItems.length === 0) {
-					error('Please add at least one item')
-					return
-				}
+		const validItems = formData.items.filter((item) => item.trim())
+		if (validItems.length === 0) {
+			error('Please add at least one item')
+			return
+		}
 
-			setsStore.addSet(formData.setName, validItems)
-				closeModal()
+		setsStore.addSet(formData.setName, validItems)
+		closeModal()
 	}
 </script>

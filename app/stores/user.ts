@@ -27,7 +27,7 @@ export const useUserStore = defineStore('user', {
 
 			startLoading('save')
 			this.userAiApiKey = key
-			
+
 			// TODO: Implement actual API call to save the key
 			await new Promise((resolve) => setTimeout(resolve, 1000))
 
