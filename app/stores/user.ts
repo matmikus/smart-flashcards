@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', {
 		},
 
 		logout() {
-			// TODO: Implement actual API call to logout
+				// TODO: Implement actual API call to logout
 		},
 	},
 })
