@@ -20,7 +20,7 @@
 					>
 						<!-- Fetch Loader (Spinner) -->
 						<div
-							v-if="loaderType === 'fetch'"
+							v-if="['fetch', 'save'].includes(loaderType || '')"
 							class="w-12 h-12 border-4 border-[#A855F7] border-t-transparent rounded-full animate-spin"
 						/>
 						<!-- AI Loader (Custom Animation) -->

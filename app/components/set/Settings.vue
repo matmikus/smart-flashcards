@@ -71,7 +71,7 @@
 						<button
 							type="button"
 							class="w-full mt-3 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-							@click="addItem"
+							@click="handleSubmit"
 						>
 							Save
 						</button>
@@ -89,6 +89,10 @@
 		set: Set
 	}>()
 
+	const setStore = useSetsStore()
+
+	const { closeModal } = useModal()
+
 	const cardColor = computed(() => {
 		return cardColors[props.set.color]!
 	})
@@ -99,8 +103,15 @@
 	})
 
 	const handleSubmit = () => {
-		console.log('handleSubmit')
-	}
+		const parsedSet = {
+			...localSet.value,
+			flashcards: localSet.value.flashcards.filter((item) => item.trim()),
+		}
+		
+		setStore.updateSet(props.set.id, parsedSet).then(() => {
+			closeModal()
+		})
+	}	
 
 	const addItem = () => {
 		localSet.value.flashcards.push('')

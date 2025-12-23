@@ -1,4 +1,7 @@
-const clickOutsideHandlers = new WeakMap<HTMLElement, (event: MouseEvent) => void>()
+const clickOutsideHandlers = new WeakMap<
+	HTMLElement,
+	(event: MouseEvent) => void
+>()
 
 export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.directive('click-outside', {

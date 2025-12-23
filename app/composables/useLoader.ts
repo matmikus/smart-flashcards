@@ -1,4 +1,4 @@
-export type LoaderType = 'fetch' | 'ai'
+export type LoaderType = 'fetch' | 'ai' | 'save'
 
 export interface LoaderState {
 	isLoading: boolean
@@ -8,6 +8,7 @@ export interface LoaderState {
 const loaderMessages: Record<LoaderType, string> = {
 	fetch: 'Loading...',
 	ai: 'AI thinking...',
+	save: 'Saving...',
 }
 
 export const useLoader = () => {

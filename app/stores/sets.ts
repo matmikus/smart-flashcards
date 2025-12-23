@@ -14,16 +14,45 @@ export const useSetsStore = defineStore('sets', {
 	},
 
 	actions: {
-		addSet() {
-			// todo
+		async addSet(name: string, items: string[]) {
+			const { startLoading, stopLoading } = useLoader()
+
+			startLoading('save')
+			this.sets.push({
+				id: crypto.randomUUID(),
+				name,
+				flashcards: items,
+				color: Math.floor(Math.random() * cardColors.length),
+			})
+
+			// TODO: Implement actual API call to update the set
+			await new Promise((resolve) => setTimeout(resolve, 1000))
+
+			stopLoading()
 		},
 
-		updateSet() {
-			// todo
+		async updateSet(id: string, set: Set) {
+			const { startLoading, stopLoading } = useLoader()
+
+			startLoading('save')
+			this.sets = this.sets.map((s) => s.id === id ? set : s)
+
+			// TODO: Implement actual API call to update the set
+			await new Promise((resolve) => setTimeout(resolve, 1000))
+
+			stopLoading()
 		},
 
-		deleteSet() {
-			// todo
+		async deleteSet(id: string) {
+			const { startLoading, stopLoading } = useLoader()
+
+			startLoading('save')
+			this.sets = this.sets.filter((set) => set.id !== id)
+
+			// TODO: Implement actual API call to delete the set
+			await new Promise((resolve) => setTimeout(resolve, 1000))
+
+			stopLoading()
 		},
 	},
 })

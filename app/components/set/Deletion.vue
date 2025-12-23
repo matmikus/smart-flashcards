@@ -34,6 +34,8 @@
 		set: Set
 	}>()
 
+	const setsStore = useSetsStore()
+
 	const { closeModal } = useModal()
 
 	const cardColor = computed(() => {
@@ -41,7 +43,9 @@
 	})
 
 	const removeSet = () => {
-		console.log('removeSet')
+		setsStore.deleteSet(props.set.id).then(() => {
+			closeModal()
+		})
 	}
 
 	const cancel = () => {

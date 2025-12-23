@@ -22,16 +22,20 @@ export const useUserStore = defineStore('user', {
 			this.userName = userData.name
 		},
 
-		setOpenaiApiKey(key: string) {
+		async setOpenaiApiKey(key: string) {
+			const { startLoading, stopLoading } = useLoader()
+
+			startLoading('save')
 			this.userAiApiKey = key
-			console.log('setOpenaiApiKey', key)
-			console.log('setOpenaiApiKey', this.userAiApiKey)
+			
+			// TODO: Implement actual API call to save the key
+			await new Promise((resolve) => setTimeout(resolve, 1000))
+
+			stopLoading()
 		},
 
 		logout() {
-			this.isAuthenticated = false
-			this.userId = null
-			this.userAiApiKey = null
+			// TODO: Implement actual API call to logout
 		},
 	},
 })

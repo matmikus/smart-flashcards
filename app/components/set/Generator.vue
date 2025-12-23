@@ -118,6 +118,21 @@
 						placeholder="Describe topic for AI here"
 					/>
 				</div>
+				<div>
+					<label
+						for="ai-amount"
+						class="block text-white mb-2 font-semibold"
+					>
+						Number of Items
+					</label>
+					<input
+						id="ai-amount"
+						v-model="formData.aiAmount"
+						type="number"
+						class="w-full p-3 rounded-md bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+						placeholder="Enter number of items"
+					/>
+				</div>
 				<button
 					type="button"
 					class="w-full px-4 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors font-semibold"
@@ -143,10 +158,14 @@
 <script setup lang="ts">
 	const { error, success } = useToast()
 	const { startLoading, stopLoading } = useLoader()
+	const { closeModal } = useModal()
+
+	const setsStore = useSetsStore()
 
 	const formData = reactive({
 		setName: '',
-		isAiGenerated: false,
+		isAiGenerated: true,
+		aiAmount: 10,
 		items: [''],
 		aiTopic: '',
 	})
@@ -185,28 +204,13 @@
 			return
 		}
 
-		try {
-			if (!formData.isAiGenerated) {
 				const validItems = formData.items.filter((item) => item.trim())
 				if (validItems.length === 0) {
 					error('Please add at least one item')
 					return
 				}
 
-				startLoading('fetch')
-				// Simulate API call
-				await new Promise((resolve) => setTimeout(resolve, 1000))
-				console.log('Creating set:', {
-					name: formData.setName,
-					items: validItems,
-				})
-				stopLoading()
-				success('Set created successfully!')
-			}
-		} finally {
-			stopLoading()
-		}
-
-		// TODO: Implement actual set creation logic
+			setsStore.addSet(formData.setName, validItems)
+				closeModal()
 	}
 </script>
