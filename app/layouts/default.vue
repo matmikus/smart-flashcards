@@ -9,20 +9,18 @@
 				</h1>
 			</NuxtLink>
 			<p>Your AI-powered flashcard learning companion</p>
-			<ClientOnly>
+			<div
+				ref="userMenuRef"
+				class="relative flex-1 flex justify-end text-4xl m-[-8px] px-2"
+			>
 				<div
-					v-click-outside="handleClickOutside"
-					class="relative flex-1 flex justify-end text-4xl m-[-8px] px-2"
+					class="text-4xl cursor-pointer select-none"
+					@click="userMenu.toggle"
 				>
-					<div
-						class="text-4xl cursor-pointer select-none"
-						@click="userMenu.toggle"
-					>
-						👨🏻‍💼
-					</div>
-					<AppUserDropdown v-if="userMenu.isOpen" />
+					👨🏻‍💼
 				</div>
-			</ClientOnly>
+				<AppUserDropdown v-if="userMenu.isOpen" />
+			</div>
 		</header>
 		<main class="text-white p-4 flex justify-center items-center flex-1">
 			<div>
@@ -37,10 +35,13 @@
 
 <script setup lang="ts">
 	const userMenu = useUserMenu()
+	const userMenuRef = ref<HTMLElement | null>(null)
 
 	const handleClickOutside = () => {
 		if (userMenu.isOpen.value) {
 			userMenu.close()
 		}
 	}
+
+	useClickOutside(userMenuRef as Ref<HTMLElement | null>, handleClickOutside)
 </script>
