@@ -22,7 +22,7 @@ export const useUserStore = defineStore('user', {
 			this.userName = userData.name
 		},
 
-		async setOpenaiApiKey(key: string) {
+		async setGroqApiKey(key: string) {
 			const { startLoading, stopLoading } = useLoader()
 
 			startLoading('save')

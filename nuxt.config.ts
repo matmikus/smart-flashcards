@@ -9,12 +9,7 @@ export default defineNuxtConfig({
 	],
 	devtools: { enabled: true },
 	css: ['~/assets/css/main.css'],
-	runtimeConfig: {
-		openaiApiKey: process.env.OPENAI_API_KEY,
-		public: {
-			apiBase: process.env.API_BASE_URL,
-		},
-	},
+	runtimeConfig: {},
 	compatibilityDate: '2025-07-15',
 	vite: {
 		server: {
@@ -40,7 +35,7 @@ export default defineNuxtConfig({
 								return 'nuxt-vendor'
 							}
 							// Large libraries get their own chunk
-							if (id.includes('openai') || id.includes('axios')) {
+							if (id.includes('groq') || id.includes('axios')) {
 								return 'api-vendor'
 							}
 							return 'vendor'

@@ -161,6 +161,7 @@
 	const { closeModal } = useModal()
 
 	const setsStore = useSetsStore()
+	const userStore = useUserStore()
 
 	const formData = reactive({
 		setName: '',
@@ -188,11 +189,38 @@
 
 		startLoading('ai')
 		try {
-			// TODO: Implement AI generation logic
-			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 2000))
-			console.log('Generating items for:', formData.aiTopic)
+			const response = await fetch(
+				'https://api.groq.com/openai/v1/chat/completions',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${userStore.getUserAiApiKey}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						model: 'openai/gpt-oss-20b',
+						messages: [
+							{
+								role: 'user',
+								content: `Generate ${formData.aiAmount} flashcard topic-items to learn about: ${formData.aiTopic}. Return only the quoted items in a comma separated array, no other text.`,
+							},
+						],
+					}),
+				}
+			)
+
+			const data = await response.json()
+
+			const content = data?.choices[0]?.message?.content
+			const dataObj = {
+				items: JSON.parse(content),
+			} as { items: string[] }
+
+			formData.items = dataObj.items
 			success('Items generated successfully!')
+		} catch (err) {
+			console.error('Fetch Error:', err)
+			error('Failed to connect to AI service')
 		} finally {
 			stopLoading()
 		}
