@@ -9,18 +9,20 @@
 				</h1>
 			</NuxtLink>
 			<p>Your AI-powered flashcard learning companion</p>
-			<div
-				v-click-outside="handleClickOutside"
-				class="relative flex-1 flex justify-end text-4xl m-[-8px] px-2"
-			>
+			<ClientOnly>
 				<div
-					class="text-4xl cursor-pointer select-none"
-					@click="userMenu.toggle"
+					v-click-outside="handleClickOutside"
+					class="relative flex-1 flex justify-end text-4xl m-[-8px] px-2"
 				>
-					👨🏻‍💼
+					<div
+						class="text-4xl cursor-pointer select-none"
+						@click="userMenu.toggle"
+					>
+						👨🏻‍💼
+					</div>
+					<AppUserDropdown v-if="userMenu.isOpen" />
 				</div>
-				<AppUserDropdown v-if="userMenu.isOpen" />
-			</div>
+			</ClientOnly>
 		</header>
 		<main class="text-white p-4 flex justify-center items-center flex-1">
 			<div>

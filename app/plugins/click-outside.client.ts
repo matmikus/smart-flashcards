@@ -4,6 +4,7 @@ const clickOutsideHandlers = new WeakMap<
 >()
 
 export default defineNuxtPlugin((nuxtApp) => {
+	// Override the SSR stub with the full client-side implementation
 	nuxtApp.vueApp.directive('click-outside', {
 		mounted(el: HTMLElement, binding) {
 			const handler = (event: MouseEvent) => {
