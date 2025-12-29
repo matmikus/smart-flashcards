@@ -10,7 +10,10 @@ export const useUserStore = defineStore('user', {
 	}),
 
 	getters: {
-		getUserAiApiKey: (state) => state.userAiApiKey,
+		getUserAiApiKey: (state) => {
+			const config = useRuntimeConfig()
+			return state.userAiApiKey || config.public.groqApiKey
+		},
 		getUserName: (state) => state.userName,
 	},
 

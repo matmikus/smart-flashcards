@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useSetsStore = defineStore('sets', {
 	state: () => ({
-		sets: mockSets as Set[],
+		sets: [] as Set[],
 	}),
 
 	getters: {
@@ -21,7 +21,7 @@ export const useSetsStore = defineStore('sets', {
 			this.sets.push({
 				id: crypto.randomUUID(),
 				name,
-				flashcards: items,
+				topics: items,
 				color: Math.floor(Math.random() * cardColors.length),
 			})
 

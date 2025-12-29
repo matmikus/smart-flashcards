@@ -50,58 +50,7 @@
 				</button>
 			</div>
 
-			<!-- Conditional Content -->
-			<div v-if="!formData.isAiGenerated" class="space-y-4">
-				<!-- Manual Items List -->
-				<div>
-					<label class="block text-white mb-2 font-semibold">
-						Items
-					</label>
-					<div class="space-y-2 max-h-[300px] overflow-y-auto">
-						<div
-							v-for="(item, index) in formData.items"
-							:key="index"
-							class="flex gap-2 items-center"
-						>
-							<input
-								v-model="formData.items[index]"
-								type="text"
-								class="flex-1 p-2 rounded-md bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-								:placeholder="`Item ${index + 1}`"
-							/>
-							<button
-								type="button"
-								class="p-2 text-red-400 hover:text-red-300 transition-colors"
-								:disabled="formData.items.length === 1"
-								@click="removeItem(index)"
-							>
-								<svg
-									class="w-5 h-5"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M6 18L18 6M6 6l12 12"
-									/>
-								</svg>
-							</button>
-						</div>
-					</div>
-					<button
-						type="button"
-						class="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-						@click="addItem"
-					>
-						+ Add Item
-					</button>
-				</div>
-			</div>
-
-			<div v-else class="space-y-4">
+			<div v-if="formData.isAiGenerated" class="space-y-4">
 				<!-- AI Generation Textarea -->
 				<div>
 					<label
@@ -142,6 +91,59 @@
 				</button>
 			</div>
 
+			<!-- Items List -->
+			<div class="space-y-4">
+				<div>
+					<label class="block text-white mb-2 font-semibold">
+						Items
+					</label>
+					<div
+						ref="itemsList"
+						class="space-y-2 max-h-[300px] overflow-y-auto"
+					>
+						<div
+							v-for="(item, index) in formData.items"
+							:key="index"
+							class="flex gap-2 items-center"
+						>
+							<input
+								v-model="formData.items[index]"
+								type="text"
+								class="flex-1 m-1 p-2 rounded-md bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								:placeholder="`Item ${index + 1}`"
+							/>
+							<button
+								type="button"
+								class="p-2 text-red-400 hover:text-red-300 transition-colors"
+								:disabled="formData.items.length === 1"
+								@click="removeItem(index)"
+							>
+								<svg
+									class="w-5 h-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M6 18L18 6M6 6l12 12"
+									/>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<button
+						type="button"
+						class="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+						@click="addItem"
+					>
+						+ Add Item
+					</button>
+				</div>
+			</div>
+
 			<!-- Submit Button -->
 			<div class="pt-4 border-t border-slate-700">
 				<button
@@ -163,6 +165,8 @@
 	const setsStore = useSetsStore()
 	const userStore = useUserStore()
 
+	const itemsList = ref<HTMLDivElement | null>(null)
+
 	const formData = reactive({
 		setName: '',
 		isAiGenerated: true,
@@ -173,6 +177,10 @@
 
 	const addItem = () => {
 		formData.items.push('')
+		itemsList.value?.scrollTo({
+			top: itemsList.value?.scrollHeight,
+			behavior: 'smooth',
+		})
 	}
 
 	const removeItem = (index: number) => {

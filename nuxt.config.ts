@@ -7,9 +7,13 @@ export default defineNuxtConfig({
 		'@nuxtjs/tailwindcss',
 		'@nuxtjs/google-fonts',
 	],
+	runtimeConfig: {
+		public: {
+			groqApiKey: process.env.GROQ_API_KEY || '',
+		},
+	},
 	devtools: { enabled: true },
 	css: ['~/assets/css/main.css'],
-	runtimeConfig: {},
 	compatibilityDate: '2025-07-15',
 	vite: {
 		server: {

@@ -12,7 +12,7 @@
 			{{ index + 1 }}
 		</h2>
 		<p class="text-white mb-4">{{ set.name }}</p>
-		<p class="text-white/70 mb-4">{{ set.flashcards.length }} flashcards</p>
+		<p class="text-white/70 mb-4">{{ set.topics.length }} flashcards</p>
 		<button
 			:class="[
 				'w-full p-2 rounded-md font-semibold text-white shadow-lg transition-all hover:scale-105',

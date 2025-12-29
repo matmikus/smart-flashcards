@@ -1,7 +1,7 @@
 export interface Set {
 	id: string
 	name: string
-	flashcards: string[]
+	topics: string[]
 	color: number
 }
 
@@ -19,7 +19,12 @@ export interface Answer {
 
 export interface Flashcard {
 	id: string
-	question: string
-	answers: Answer[]
-	status: string
+	topic: string
+	question?: string
+	answers?: Answer[]
+	status: 'success' | 'failure' | 'waiting'
+}
+
+export interface SetData extends Set {
+	flashcards: Flashcard[]
 }

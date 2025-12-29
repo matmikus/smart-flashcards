@@ -36,12 +36,12 @@
 						</div>
 						<div class="space-y-2 max-h-[300px] overflow-y-auto">
 							<div
-								v-for="(item, index) in localSet.flashcards"
+								v-for="(item, index) in localSet.topics"
 								:key="index"
 								class="flex gap-2 items-center"
 							>
 								<input
-									v-model="localSet.flashcards[index]"
+									v-model="localSet.topics[index]"
 									type="text"
 									class="flex-1 p-2 m-1 rounded-md bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 									:placeholder="`Item ${index + 1}`"
@@ -49,7 +49,7 @@
 								<button
 									type="button"
 									class="p-2 text-red-400 hover:text-red-300 transition-colors"
-									:disabled="localSet.flashcards.length === 1"
+									:disabled="localSet.topics.length === 1"
 									@click="removeItem(index)"
 								>
 									<svg
@@ -99,13 +99,13 @@
 
 	const localSet = ref<Set>({
 		...props.set,
-		flashcards: [...props.set.flashcards],
+		topics: [...props.set.topics],
 	})
 
 	const handleSubmit = () => {
 		const parsedSet = {
 			...localSet.value,
-			flashcards: localSet.value.flashcards.filter((item) => item.trim()),
+			flashcards: localSet.value.topics.filter((item) => item.trim()),
 		}
 
 		setStore.updateSet(props.set.id, parsedSet).then(() => {
@@ -114,10 +114,10 @@
 	}
 
 	const addItem = () => {
-		localSet.value.flashcards.push('')
+		localSet.value.topics.push('')
 	}
 
 	const removeItem = (index: number) => {
-		localSet.value.flashcards.splice(index, 1)
+		localSet.value.topics.splice(index, 1)
 	}
 </script>
