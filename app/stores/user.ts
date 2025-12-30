@@ -37,8 +37,13 @@ export const useUserStore = defineStore('user', {
 			stopLoading()
 		},
 
-		logout() {
-			// TODO: Implement actual API call to logout
+		async logout() {
+			const supabase = useSupabaseClient()
+			this.isAuthenticated = false
+			this.userId = null
+			this.userAiApiKey = null
+			this.userName = null
+			await supabase.auth.signOut()
 		},
 	},
 })

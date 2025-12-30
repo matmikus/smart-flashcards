@@ -51,8 +51,9 @@
 		userMenu.toggle()
 	}
 
-	const logout = () => {
-		console.log('logout')
+	const logout = async () => {
 		userMenu.toggle()
+		await userStore.logout()
+		navigateTo('/login')
 	}
 </script>

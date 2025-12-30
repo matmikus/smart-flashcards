@@ -6,10 +6,19 @@ export default defineNuxtConfig({
 		'@nuxt/eslint',
 		'@nuxtjs/tailwindcss',
 		'@nuxtjs/google-fonts',
+		'@nuxtjs/supabase',
 	],
 	runtimeConfig: {
 		public: {
 			groqApiKey: process.env.GROQ_API_KEY || '',
+		},
+	},
+	supabase: {
+		redirect: true, // Enabled by default
+		redirectOptions: {
+			login: '/login',
+			callback: '/',
+			exclude: ['/login'], // Routes that don't require auth
 		},
 	},
 	devtools: { enabled: true },
