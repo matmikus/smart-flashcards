@@ -2,7 +2,7 @@
 	<div
 		v-if="setData"
 		:class="[
-			'p-4 rounded-md bg-slate-800 border-2 shadow-lg flex flex-col',
+			'p-4 rounded-md bg-slate-800 border-2 shadow-lg flex flex-col relative',
 			cardColor!.border,
 			cardColor!.shadow,
 		]"
@@ -12,7 +12,7 @@
 		<button
 			v-for="(item, index) in currentFlashcard?.answers"
 			:key="index"
-			class="backdrop-blur-sm text-white mt-4 mr-4 transition-colors border border-white/10 w-full p-2 rounded-md text-white shadow-lg transition-all font-mono"
+			class="backdrop-blur-sm mt-4 mr-4 transition-colors border border-white/10 w-full p-2 rounded-md shadow-lg transition-all font-mono"
 			:disabled="checkedAnswerIndex !== null"
 			:class="[
 				checkedAnswerIndex === index
@@ -20,11 +20,28 @@
 						? 'bg-green-500'
 						: 'bg-red-500'
 					: 'bg-slate-700/50 hover:bg-slate-700',
+				checkedAnswerIndex !== null &&
+				checkedAnswerIndex !== index &&
+				item.isCorrect
+					? 'text-green-500'
+					: 'text-white',
 			]"
 			@click="checkAnswer(index)"
 		>
 			{{ item.text }}
 		</button>
+		<div
+			v-if="checkedAnswerIndex !== null"
+			class="absolute top-0 right-0 w-full h-full flex justify-center items-center"
+		>
+			<button
+				class="h-[200px] text-white font-mono border border-white/10 rounded-md px-16 bg-indigo-950 text-[60px] opacity-50 hover:opacity-100 transition-opacity flex items-center justify-center"
+				@click="nextFlashcard"
+			>
+				<div>NEXT</div>
+				<div class="text-[60px] ml-8">➡️</div>
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -59,5 +76,9 @@
 			currentFlashcard.value!.status = 'failure'
 		}
 		learningStore.updateFlashcard(currentFlashcard.value!)
+	}
+
+	const nextFlashcard = () => {
+		// todo
 	}
 </script>

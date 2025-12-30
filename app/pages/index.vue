@@ -20,6 +20,7 @@
 				:index="index"
 				:set="set"
 			/>
+			<div v-if="sets.length === 0">No sets found</div>
 		</div>
 	</div>
 </template>
