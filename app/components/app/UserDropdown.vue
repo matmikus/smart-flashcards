@@ -5,7 +5,7 @@
 		@click.stop=""
 	>
 		<div class="flex items-center mb-4">
-			<div class="text-gray-400 text-right w-full">user@user.com</div>
+			<div class="text-gray-400 text-right w-full">{{ userName }}</div>
 		</div>
 		<div class="flex flex-col gap-2">
 			<div class="text-white">
@@ -45,6 +45,7 @@
 	const userMenu = useUserMenu()
 	const userStore = useUserStore()
 	const groqApiKey = ref(userStore.getUserAiApiKey)
+	const userName = ref(userStore.getUserEmail)
 
 	const saveGroqApiKey = () => {
 		userStore.setGroqApiKey(groqApiKey.value || '')

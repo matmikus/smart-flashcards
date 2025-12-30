@@ -7,7 +7,7 @@
 				Your Sets
 			</h1>
 			<button
-				class="bg-purple-500 text-white p-2 rounded-md font-semibold shadow-lg shadow-purple-500/50 hover:shadow-purple-400/50 hover:bg-purple-400 transition-all border border-purple-400/50"
+				class="bg-slate-800 text-white p-2 rounded-md font-semibold shadow-lg shadow-purple-500/50 hover:shadow-purple-400/50 hover:bg-purple-400 transition-all border border-purple-400/50"
 				@click="createNewSet"
 			>
 				Create New Set

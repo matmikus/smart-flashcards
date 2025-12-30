@@ -1,3 +1,18 @@
+import type { User as SupabaseJsUser } from '@supabase/supabase-js'
+
+// Type that accepts both User object and JWT payload
+// Uses union type to avoid index signature conflicts
+export type SupabaseUser =
+	| SupabaseJsUser // Full User object from session.user
+	| {
+			sub: string // JWT payload from useSupabaseUser()
+			email?: string | null
+			id?: string
+			user_metadata?: Record<string, unknown>
+			app_metadata?: Record<string, unknown>
+			[key: string]: unknown
+	  }
+
 export interface Set {
 	id: string
 	name: string

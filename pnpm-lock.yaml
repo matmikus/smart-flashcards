@@ -47,6 +47,9 @@ importers:
             '@nuxtjs/tailwindcss':
                 specifier: ^6.14.0
                 version: 6.14.0(magicast@0.5.1)(yaml@2.8.2)
+            '@supabase/supabase-js':
+                specifier: ^2.89.0
+                version: 2.89.0
             '@types/node':
                 specifier: ^25.0.3
                 version: 25.0.3

@@ -33,7 +33,7 @@
 					v-model="email"
 					type="email"
 					required
-					class="w-full p-2 rounded-md bg-indigo-700 text-indigo-100"
+					class="w-full p-2 rounded-md bg-white text-black"
 				/>
 			</div>
 			<div class="mb-4">
@@ -46,7 +46,7 @@
 					required
 					minlength="6"
 					type="password"
-					class="w-full p-2 rounded-md bg-indigo-700 text-indigo-100"
+					class="w-full p-2 rounded-md bg-white text-black"
 				/>
 			</div>
 			<div v-if="error" class="mb-4 text-red-400 text-sm">
@@ -55,9 +55,9 @@
 			<button
 				type="submit"
 				:disabled="loading"
-				class="w-full p-2 rounded-md bg-indigo-700 text-indigo-100"
+				class="w-full p-2 rounded-md bg-indigo-700 text-indigo-100 uppercase font-bold"
 			>
-				Start
+				{{ isSignUp ? 'Create Account' : 'Login' }}
 			</button>
 		</form>
 	</div>
