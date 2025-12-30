@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-	import type { Set } from '@/types'
+	import type { Set } from '~/types'
 
 	const { modalState, closeModal } = useModal()
 
@@ -48,12 +48,4 @@
 		get: () => modalState.value.type === 'set-deletion',
 		set: () => closeModal(),
 	})
-
-	// Debug: log modal state changes
-	watch(
-		() => modalState.value.type,
-		(newType) => {
-			console.log('Modal type changed:', newType)
-		}
-	)
 </script>
