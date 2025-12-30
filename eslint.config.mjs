@@ -31,16 +31,6 @@ export default withNuxt(
 		},
 	},
 	{
-		files: ['**/*.vue'],
-		languageOptions: {
-			parserOptions: {
-				parser: '@typescript-eslint/parser',
-				ecmaVersion: 'latest',
-				sourceType: 'module',
-			},
-		},
-	},
-	{
 		files: ['**/*.{js,ts,jsx,tsx,vue}'],
 		rules: {
 			// Re-enable @stylistic/indent for non-Vue files
