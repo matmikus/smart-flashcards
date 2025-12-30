@@ -47,9 +47,13 @@
 	const groqApiKey = ref(userStore.getUserAiApiKey)
 	const userName = ref(userStore.getUserEmail)
 
-	const saveGroqApiKey = () => {
-		userStore.setGroqApiKey(groqApiKey.value || '')
-		userMenu.toggle()
+	const saveGroqApiKey = async () => {
+		try {
+			await userStore.setGroqApiKey(groqApiKey.value || '')
+			userMenu.toggle()
+		} catch (err) {
+			console.error('Error saving API key:', err)
+		}
 	}
 
 	const logout = async () => {

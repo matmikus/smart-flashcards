@@ -13,6 +13,14 @@ export type SupabaseUser =
 			[key: string]: unknown
 	  }
 
+export interface UserKey {
+	id?: string
+	user_id: string
+	api_key: string | null
+	created_at?: string | null
+	updated_at?: string | null
+}
+
 export interface Set {
 	id: string
 	name: string

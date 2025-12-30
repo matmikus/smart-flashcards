@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { SupabaseUser } from '~/types'
+import type { SupabaseUser, UserKey } from '~/types'
 
 export const useUserStore = defineStore('user', {
 	state: () => ({
@@ -35,42 +35,45 @@ export const useUserStore = defineStore('user', {
 		},
 
 		async loadUserSettings() {
-			if (!this.userId || import.meta.server) return
+			if (!this.userId) return
 
-			// const supabase = useSupabaseClient()
+			const supabase = useSupabaseClient()
 
-			// try {
-			// 	const { data, error } = await supabase
-			// 		.from('user_settings')
-			// 		.select('groq_api_key')
-			// 		.eq('user_id', this.userId)
-			// 		.single()
+			try {
+				const { data, error } = await supabase
+					.from('user_key')
+					.select('api_key')
+					.eq('user_id', this.userId)
+					.single()
 
-			// 	if (!error && data?.groq_api_key) {
-			// 		this.userAiApiKey = data.groq_api_key
-			// 	}
-			// } catch (err) {
-			// 	// Table might not exist yet, ignore
-			// }
+				if (!error && data) {
+					this.userAiApiKey = (data as UserKey).api_key
+				}
+			} catch (err: unknown) {
+				// No API key set yet or table doesn't exist - this is fine
+				console.error('User API key not found:', err)
+			}
 		},
 
 		async setGroqApiKey(key: string) {
-			if (!this.userId || import.meta.server) return
+			if (!this.userId) return
 
 			const { startLoading, stopLoading } = useLoader()
-			// const supabase = useSupabaseClient()
 
 			startLoading('save')
 			this.userAiApiKey = key
 
 			try {
-				// const { error } = await supabase.from('user_settings').upsert({
-				// 	user_id: this.userId,
-				// 	groq_api_key: key,
-				// })
-				// if (error) throw error
+				console.log('Calling Supabase upsert...')
+
+				// TODO: Implement Supabase upsert
+
+				console.log('API key saved successfully!')
 			} catch (err) {
 				console.error('Failed to save API key:', err)
+				// Revert local state on error
+				this.userAiApiKey = null
+				throw err
 			} finally {
 				stopLoading()
 			}
