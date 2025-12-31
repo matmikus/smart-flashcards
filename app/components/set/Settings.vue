@@ -105,7 +105,7 @@
 	const handleSubmit = () => {
 		const parsedSet = {
 			...localSet.value,
-			flashcards: localSet.value.topics.filter((item) => item.trim()),
+			topics: localSet.value.topics.filter((item) => item.trim()),
 		}
 
 		setStore.updateSet(props.set.id, parsedSet).then(() => {

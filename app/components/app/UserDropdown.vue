@@ -44,8 +44,8 @@
 <script setup lang="ts">
 	const userMenu = useUserMenu()
 	const userStore = useUserStore()
-	const groqApiKey = ref(userStore.getUserAiApiKey)
-	const userName = ref(userStore.getUserEmail)
+	const groqApiKey = computed(() => userStore.getUserAiApiKey)
+	const userName = computed(() => userStore.getUserEmail)
 
 	const saveGroqApiKey = async () => {
 		try {

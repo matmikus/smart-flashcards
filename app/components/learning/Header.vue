@@ -24,7 +24,6 @@
 <script setup lang="ts">
 	const learningStore = useLearningStore()
 	const setData = computed(() => learningStore.getSetData)
-
-	const cardColor = cardColors[setData?.value?.color ?? 0]
+	const cardColor = computed(() => cardColors[setData?.value?.color ?? 0])
 	const passed = ref(0)
 </script>

@@ -32,6 +32,7 @@ export const useUserStore = defineStore('user', {
 			this.userEmail = supabaseUser.email || null
 
 			await this.loadUserSettings()
+			await useSetsStore().fetchSets()
 		},
 
 		async loadUserSettings() {
@@ -69,11 +70,9 @@ export const useUserStore = defineStore('user', {
 				const supabase = useSupabaseClient()
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const { data, error } = await (supabase.from('user_key') as any)
+				const { error } = await (supabase.from('user_key') as any)
 					.upsert({ user_id: this.userId, api_key: key })
 					.select()
-
-				console.log('Test:', { data, error })
 
 				if (error) {
 					console.error('Supabase error:', error)

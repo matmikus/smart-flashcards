@@ -51,9 +51,10 @@
 
 	const learningStore = useLearningStore()
 	const setData = computed(() => learningStore.getSetData)
+	const cardColor = computed(() => cardColors[setData?.value?.color ?? 0])
+
 	const currentFlashcard = ref<Flashcard | null>(null)
 	const checkedAnswerIndex = ref<number | null>(null)
-	const cardColor = cardColors[setData?.value?.color ?? 0]
 
 	watchOnce(
 		() => learningStore.getFlashcards,
