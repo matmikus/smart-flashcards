@@ -37,9 +37,9 @@ export const useUserStore = defineStore('user', {
 		async loadUserSettings() {
 			if (!this.userId) return
 
-			const supabase = useSupabaseClient()
-
 			try {
+				const supabase = useSupabaseClient()
+
 				const { data, error } = await supabase
 					.from('user_key')
 					.select('api_key')
@@ -66,7 +66,19 @@ export const useUserStore = defineStore('user', {
 			try {
 				console.log('Calling Supabase upsert...')
 
-				// TODO: Implement Supabase upsert
+				const supabase = useSupabaseClient()
+
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const { data, error } = await (supabase.from('user_key') as any)
+					.upsert({ user_id: this.userId, api_key: key })
+					.select()
+
+				console.log('Test:', { data, error })
+
+				if (error) {
+					console.error('Supabase error:', error)
+					throw error
+				}
 
 				console.log('API key saved successfully!')
 			} catch (err) {

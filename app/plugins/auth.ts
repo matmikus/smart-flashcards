@@ -14,7 +14,7 @@ export default defineNuxtPlugin(async () => {
 		// Watch Supabase user changes
 		watch(user, async (newUser) => {
 			if (newUser) {
-				await userStore.initializeUser(newUser)
+				userStore.initializeUser(newUser)
 			} else {
 				userStore.isAuthenticated = false
 				userStore.userId = null
@@ -26,7 +26,7 @@ export default defineNuxtPlugin(async () => {
 		// Listen for auth state changes
 		supabase.auth.onAuthStateChange(async (event, session) => {
 			if (event === 'SIGNED_IN' && session?.user) {
-				await userStore.initializeUser(session.user)
+				userStore.initializeUser(session.user)
 			} else if (event === 'SIGNED_OUT') {
 				userStore.isAuthenticated = false
 				userStore.userId = null
