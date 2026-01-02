@@ -1,38 +1,17 @@
-export type ModalType = 'create-set' | 'set-settings' | 'set-deletion' | null
-
-export interface ModalState {
-	type: ModalType
-	props?: Record<string, unknown>
-}
+import { useModalStore } from '~/stores/modal'
+export type { ModalType, ModalState } from '~/stores/modal'
+export { useModalStore } from '~/stores/modal'
 
 export const useModal = () => {
-	const modalState = useState<ModalState>('modal', () => ({
-		type: null,
-		props: {},
-	}))
-
-	const openModal = (type: ModalType, props?: Record<string, unknown>) => {
-		modalState.value = {
-			type,
-			props: props || {},
-		}
-	}
-
-	const closeModal = () => {
-		modalState.value = {
-			type: null,
-			props: {},
-		}
-	}
-
-	const isOpen = (type: ModalType) => {
-		return modalState.value.type === type
-	}
+	const modalStore = useModalStore()
 
 	return {
-		modalState: readonly(modalState),
-		openModal,
-		closeModal,
-		isOpen,
+		modalState: computed(() => ({
+			type: modalStore.type,
+			props: modalStore.props,
+		})),
+		openModal: modalStore.openModal,
+		closeModal: modalStore.closeModal,
+		isOpen: modalStore.isOpen,
 	}
 }

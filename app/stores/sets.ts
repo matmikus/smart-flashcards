@@ -30,6 +30,11 @@ export const useSetsStore = defineStore('sets', {
 			this.sets.push(setData)
 
 			try {
+				// Only execute on client side where Nuxt context is available
+				if (import.meta.server) {
+					throw new Error('Cannot add set on server side')
+				}
+
 				const supabase = useSupabaseClient()
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,6 +74,11 @@ export const useSetsStore = defineStore('sets', {
 			this.sets = this.sets.map((s) => (s.id === id ? set : s))
 
 			try {
+				// Only execute on client side where Nuxt context is available
+				if (import.meta.server) {
+					throw new Error('Cannot update set on server side')
+				}
+
 				const supabase = useSupabaseClient()
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,8 +104,6 @@ export const useSetsStore = defineStore('sets', {
 			} finally {
 				stopLoading()
 			}
-
-			stopLoading()
 		},
 
 		async deleteSet(id: string) {
@@ -104,6 +112,11 @@ export const useSetsStore = defineStore('sets', {
 			startLoading('save')
 			this.sets = this.sets.filter((set) => set.id !== id)
 			try {
+				// Only execute on client side where Nuxt context is available
+				if (import.meta.server) {
+					throw new Error('Cannot delete set on server side')
+				}
+
 				const supabase = useSupabaseClient()
 				const { error } = await supabase
 					.from('user_set')
@@ -129,20 +142,33 @@ export const useSetsStore = defineStore('sets', {
 			const { startLoading, stopLoading } = useLoader()
 
 			startLoading('fetch')
-			const supabase = useSupabaseClient()
-			const { data, error } = await supabase
-				.from('user_set')
-				.select('set_data')
-				.eq('user_id', useUserStore().userId!)
-			if (error) {
-				console.error('Supabase error:', error)
-				throw error
+
+			try {
+				// Only fetch on client side where Nuxt context is available
+				if (import.meta.server) {
+					return
+				}
+
+				const supabase = useSupabaseClient()
+
+				const { data, error } = await supabase
+					.from('user_set')
+					.select('set_data')
+					.eq('user_id', useUserStore().userId!)
+				if (error) {
+					console.error('Supabase error:', error)
+					throw error
+				}
+				this.sets =
+					(data as { set_data: Set }[] | null)?.map(
+						(set) => set.set_data
+					) ?? []
+			} catch (err) {
+				console.error('Failed to fetch sets:', err)
+				throw err
+			} finally {
+				stopLoading()
 			}
-			this.sets =
-				(data as { set_data: Set }[] | null)?.map(
-					(set) => set.set_data
-				) ?? []
-			stopLoading()
 		},
 	},
 })

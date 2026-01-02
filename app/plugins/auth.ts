@@ -4,6 +4,10 @@ export default defineNuxtPlugin(async () => {
 
 	// Initialize user if already logged in (works on both server and client)
 	if (user.value) {
+		// On client side, ensure context is ready before calling store actions
+		if (import.meta.client) {
+			await nextTick()
+		}
 		await userStore.initializeUser(user.value)
 	}
 

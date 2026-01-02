@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-	import type { Toast } from '@/composables/useToast'
+	import type { Toast } from '~/composables/useToast'
 
 	const props = defineProps<{
 		toast: Toast

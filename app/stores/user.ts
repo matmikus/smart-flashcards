@@ -38,6 +38,11 @@ export const useUserStore = defineStore('user', {
 		async loadUserSettings() {
 			if (!this.userId) return
 
+			// Only execute on client side where Nuxt context is available
+			if (import.meta.server) {
+				return
+			}
+
 			try {
 				const supabase = useSupabaseClient()
 
@@ -65,6 +70,11 @@ export const useUserStore = defineStore('user', {
 			this.userAiApiKey = key
 
 			try {
+				// Only execute on client side where Nuxt context is available
+				if (import.meta.server) {
+					throw new Error('Cannot save API key on server side')
+				}
+
 				console.log('Calling Supabase upsert...')
 
 				const supabase = useSupabaseClient()
@@ -91,6 +101,11 @@ export const useUserStore = defineStore('user', {
 		},
 
 		async logout() {
+			// Only execute on client side where Nuxt context is available
+			if (import.meta.server) {
+				return
+			}
+
 			const supabase = useSupabaseClient()
 
 			await supabase.auth.signOut()

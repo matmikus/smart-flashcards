@@ -1,17 +1,13 @@
+import { useUserMenuStore } from '~/stores/userMenu'
+export { useUserMenuStore } from '~/stores/userMenu'
+
 export const useUserMenu = () => {
-	const isOpen = useState<boolean>('userMenu', () => false)
-
-	const toggle = () => {
-		isOpen.value = !isOpen.value
-	}
-
-	const close = () => {
-		isOpen.value = false
-	}
+	const userMenuStore = useUserMenuStore()
 
 	return {
-		isOpen: readonly(isOpen),
-		toggle,
-		close,
+		isOpen: computed(() => userMenuStore.isOpen),
+		toggle: userMenuStore.toggle,
+		open: userMenuStore.open,
+		close: userMenuStore.close,
 	}
 }
