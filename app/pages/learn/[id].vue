@@ -13,6 +13,7 @@
 	// Fetch sets on server and client
 	await useAsyncData('sets', async () => {
 		await fetchSets()
+		return { fetched: true }
 	})
 
 	// Initialize learning store with the set data (works on both server and client)
@@ -21,5 +22,6 @@
 		if (id && typeof id === 'string') {
 			learningStore.setCurrentSetData(id)
 		}
+		return { initialized: true }
 	})
 </script>

@@ -1,6 +1,4 @@
 import { useLoaderStore } from '~/stores/loader'
-export type { LoaderType, LoaderState } from '~/stores/loader'
-export { useLoaderStore } from '~/stores/loader'
 
 export const useLoader = () => {
 	const loaderStore = useLoaderStore()

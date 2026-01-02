@@ -1,7 +1,5 @@
 import { useSetsStore } from '~/stores/sets'
 import type { Set } from '~/types'
-export { useSetsStore } from '~/stores/sets'
-export type { Set } from '~/types'
 
 export const useSets = () => {
 	const setsStore = useSetsStore()

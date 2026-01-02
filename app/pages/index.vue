@@ -32,6 +32,7 @@
 	// Fetch on server and client, await ensures SSR
 	await useAsyncData('sets', async () => {
 		await fetchSets()
+		return { fetched: true }
 	})
 
 	const createNewSet = () => {

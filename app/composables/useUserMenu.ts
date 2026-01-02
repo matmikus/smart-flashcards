@@ -1,5 +1,4 @@
 import { useUserMenuStore } from '~/stores/userMenu'
-export { useUserMenuStore } from '~/stores/userMenu'
 
 export const useUserMenu = () => {
 	const userMenuStore = useUserMenuStore()

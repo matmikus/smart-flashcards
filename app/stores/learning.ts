@@ -8,6 +8,7 @@ export const useLearningStore = defineStore('learning', {
 	state: () => ({
 		setData: null as SetData | null,
 		isGeneratingFlashcard: false,
+		attempts: 0,
 	}),
 	getters: {
 		getFlashcards: (state) => state.setData?.flashcards,
@@ -30,12 +31,17 @@ export const useLearningStore = defineStore('learning', {
 						})
 					),
 				}
+
+				this.attempts = 0
 			}
 		},
 		async pickRandomFlashcard() {
 			console.log('pickRandomFlashcard')
-			const flashcards = this.getFlashcards
-			if (flashcards) {
+			const flashcards = this.getFlashcards?.filter(
+				(f) => f.status !== 'success'
+			)
+
+			if (flashcards && flashcards.length > 0) {
 				const randomIndex = Math.floor(
 					Math.random() * flashcards.length
 				)
@@ -102,16 +108,15 @@ export const useLearningStore = defineStore('learning', {
 
 					success('Flashcard generated successfully!')
 
+					stopLoading()
+					this.isGeneratingFlashcard = false
+
 					return flashcard
 				} catch (err) {
 					console.error('Fetch Error:', err)
 					error('Failed to connect to AI service')
-				} finally {
-					stopLoading()
-					this.isGeneratingFlashcard = false
+					this.pickRandomFlashcard()
 				}
-
-				return flashcards[randomIndex]
 			}
 			return null
 		},
@@ -121,6 +126,9 @@ export const useLearningStore = defineStore('learning', {
 					f.id === flashcard.id ? flashcard : f
 				)
 			}
+		},
+		incrementAttempts() {
+			this.attempts++
 		},
 	},
 })

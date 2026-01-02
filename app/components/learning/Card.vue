@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-if="setData"
+		v-if="currentFlashcard"
 		:class="[
 			'p-4 rounded-md bg-slate-800 border-2 shadow-lg flex flex-col relative',
 			cardColor!.border,
@@ -47,7 +47,6 @@
 
 <script setup lang="ts">
 	import type { Flashcard } from '~/types'
-	import { watchOnce } from '@vueuse/core'
 
 	const learningStore = useLearningStore()
 	const setData = computed(() => learningStore.getSetData)
@@ -56,17 +55,16 @@
 	const currentFlashcard = ref<Flashcard | null>(null)
 	const checkedAnswerIndex = ref<number | null>(null)
 
-	watchOnce(
-		() => learningStore.getFlashcards,
-		async (flashcards) => {
-			if (flashcards && flashcards.length > 0) {
-				const flashcard = await learningStore.pickRandomFlashcard()
-				if (flashcard) {
-					currentFlashcard.value = flashcard
-				}
+	// Use onMounted to ensure it runs after data is available
+	onMounted(async () => {
+		const flashcards = learningStore.getFlashcards
+		if (flashcards && flashcards.length > 0) {
+			const flashcard = await learningStore.pickRandomFlashcard()
+			if (flashcard) {
+				currentFlashcard.value = flashcard
 			}
 		}
-	)
+	})
 
 	const checkAnswer = (index: number) => {
 		checkedAnswerIndex.value = index
@@ -77,9 +75,19 @@
 			currentFlashcard.value!.status = 'failure'
 		}
 		learningStore.updateFlashcard(currentFlashcard.value!)
+		learningStore.incrementAttempts()
 	}
 
-	const nextFlashcard = () => {
-		// todo
+	const nextFlashcard = async () => {
+		// Reset the answer state for the new flashcard
+		checkedAnswerIndex.value = null
+
+		// Get a new random flashcard (will generate question/answers if needed)
+		const flashcard = await learningStore.pickRandomFlashcard()
+		if (flashcard) {
+			currentFlashcard.value = flashcard
+		} else {
+			currentFlashcard.value = null
+		}
 	}
 </script>
