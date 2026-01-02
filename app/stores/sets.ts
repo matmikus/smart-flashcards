@@ -141,14 +141,17 @@ export const useSetsStore = defineStore('sets', {
 		async fetchSets() {
 			const { startLoading, stopLoading } = useLoader()
 
-			startLoading('fetch')
+			// Skip if already fetching or data exists (prevent duplicates)
+			if (this.sets.length > 0) {
+				return
+			}
+
+			// Only show loader on client side
+			if (import.meta.client) {
+				startLoading('fetch')
+			}
 
 			try {
-				// Only fetch on client side where Nuxt context is available
-				if (import.meta.server) {
-					return
-				}
-
 				const supabase = useSupabaseClient()
 
 				const { data, error } = await supabase
@@ -167,7 +170,9 @@ export const useSetsStore = defineStore('sets', {
 				console.error('Failed to fetch sets:', err)
 				throw err
 			} finally {
-				stopLoading()
+				if (import.meta.client) {
+					stopLoading()
+				}
 			}
 		},
 	},

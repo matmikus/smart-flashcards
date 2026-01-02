@@ -27,9 +27,14 @@
 
 <script setup lang="ts">
 	const setsStore = useSetsStore()
-	const sets = computed(() => setsStore.getSets)
-
 	const { openModal } = useModal()
+
+	// Fetch on server and client, await ensures SSR
+	await useAsyncData('sets', async () => {
+		await setsStore.fetchSets()
+	})
+
+	const sets = computed(() => setsStore.getSets)
 
 	const createNewSet = () => {
 		openModal('create-set')
