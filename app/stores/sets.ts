@@ -138,42 +138,8 @@ export const useSetsStore = defineStore('sets', {
 			}
 		},
 
-		async fetchSets() {
-			const { startLoading, stopLoading } = useLoader()
-
-			// Skip if already fetching or data exists (prevent duplicates)
-			if (this.sets.length > 0) {
-				return
-			}
-
-			// Only show loader on client side
-			if (import.meta.client) {
-				startLoading('fetch')
-			}
-
-			try {
-				const supabase = useSupabaseClient()
-
-				const { data, error } = await supabase
-					.from('user_set')
-					.select('set_data')
-					.eq('user_id', useUserStore().userId!)
-				if (error) {
-					console.error('Supabase error:', error)
-					throw error
-				}
-				this.sets =
-					(data as { set_data: Set }[] | null)?.map(
-						(set) => set.set_data
-					) ?? []
-			} catch (err) {
-				console.error('Failed to fetch sets:', err)
-				throw err
-			} finally {
-				if (import.meta.client) {
-					stopLoading()
-				}
-			}
-		},
+		// Note: fetchSets logic moved to useSets composable for SSR support
+		// Store actions that need Supabase should be called from composables
+		// This keeps stores framework-agnostic
 	},
 })

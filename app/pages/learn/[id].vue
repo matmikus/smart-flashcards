@@ -7,10 +7,16 @@
 
 <script setup lang="ts">
 	const learningStore = useLearningStore()
-
+	const { fetchSets } = useSets()
 	const route = useRoute()
 
-	onMounted(() => {
+	// Fetch sets on server and client
+	await useAsyncData('sets', async () => {
+		await fetchSets()
+	})
+
+	// Initialize learning store with the set data (works on both server and client)
+	await useAsyncData(`learn-${route.params.id}`, async () => {
 		const id = route.params.id
 		if (id && typeof id === 'string') {
 			learningStore.setCurrentSetData(id)

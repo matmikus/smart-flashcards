@@ -32,7 +32,8 @@ export const useUserStore = defineStore('user', {
 			this.userEmail = supabaseUser.email || null
 
 			await this.loadUserSettings()
-			await useSetsStore().fetchSets()
+			// Note: Sets fetching is handled by pages via useSets composable
+			// This keeps stores framework-agnostic and allows SSR
 		},
 
 		async loadUserSettings() {

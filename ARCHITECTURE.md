@@ -38,10 +38,11 @@
 **Rules:**
 
 - ✅ Store all application state
-- ✅ Define actions that modify state
+- ✅ Define actions that modify state (mutations)
 - ✅ Can be called from anywhere (stores, components, plugins, middleware)
-- ✅ No Nuxt-specific composables (`useState`, `useSupabaseClient`, etc.)
-- ✅ Use `useSupabaseClient()` only when wrapped in client-side checks
+- ✅ **DO NOT** use Nuxt-specific composables (`useState`, `useSupabaseClient`, etc.)
+- ✅ **DO NOT** handle data fetching that requires SSR (move to composables)
+- ✅ Mutations (add/update/delete) can use composables like `useLoader()` and `useToast()`
 - ✅ Export types and interfaces
 
 **Example:**
@@ -69,12 +70,13 @@ export const useToastStore = defineStore('toast', {
 **Rules:**
 
 - ✅ Wrap Pinia stores for Vue reactivity
-- ✅ Can use Nuxt composables (`useState`, `useRouter`, etc.) ONLY when called from valid contexts
+- ✅ Can use Nuxt composables (`useState`, `useRouter`, `useSupabaseClient`, etc.) ONLY when called from valid contexts
+- ✅ Handle data fetching that requires Nuxt context (SSR support)
 - ✅ Provide computed properties for reactive access
 - ✅ Export types for components
-- ✅ Keep thin - delegate to stores
+- ✅ Keep thin - delegate to stores for state management
 
-**Example:**
+**Example - Simple Wrapper:**
 
 ```typescript
 // composables/useToast.ts
@@ -89,6 +91,41 @@ export const useToast = () => {
 }
 ```
 
+**Example - Data Fetching Composable:**
+
+```typescript
+// composables/useSets.ts
+export const useSets = () => {
+	const setsStore = useSetsStore()
+	const { startLoading, stopLoading } = useLoader()
+
+	const fetchSets = async () => {
+		if (setsStore.sets.length > 0) return
+
+		if (import.meta.client) {
+			startLoading('fetch')
+		}
+
+		try {
+			// useSupabaseClient() works here (composable has Nuxt context)
+			const supabase = useSupabaseClient()
+			const { data } = await supabase.from('user_set').select('set_data')
+			setsStore.sets = data?.map((set) => set.set_data) ?? []
+		} finally {
+			if (import.meta.client) {
+				stopLoading()
+			}
+		}
+	}
+
+	return {
+		sets: computed(() => setsStore.sets),
+		fetchSets,
+		addSet: setsStore.addSet, // Mutations can stay in store
+	}
+}
+```
+
 ### 3. Store Actions (Business Logic)
 
 **Location:** Inside Pinia store `actions`
@@ -97,26 +134,57 @@ export const useToast = () => {
 
 - ✅ Can call other stores
 - ✅ Can call composables that wrap stores (like `useLoader()`)
-- ✅ Use `useSupabaseClient()` only with client-side checks
+- ✅ **DO NOT** call `useSupabaseClient()` directly in stores (use composables instead)
 - ✅ Handle errors appropriately
 - ✅ Use loading states via `useLoader()` composable
+- ✅ Keep stores framework-agnostic - no Nuxt-specific composables
 
 **Example:**
 
 ```typescript
+// ❌ BAD - Don't call Supabase in stores
 async fetchSets() {
-  const { startLoading, stopLoading } = useLoader()
-
-  startLoading('fetch')
-  try {
-    if (import.meta.server) return
-
-    const supabase = useSupabaseClient()
-    // ... fetch logic
-  } finally {
-    stopLoading()
-  }
+  const supabase = useSupabaseClient() // Requires Nuxt context!
 }
+
+// ✅ GOOD - Data fetching in composables
+// composables/useSets.ts
+export const useSets = () => {
+  const setsStore = useSetsStore()
+
+  const fetchSets = async () => {
+    const supabase = useSupabaseClient() // Works in composable context
+    // ... fetch logic, update store
+  }
+
+  return { fetchSets, sets: computed(() => setsStore.sets) }
+}
+```
+
+**For SSR Data Fetching:**
+
+Data fetching that needs SSR support should be in composables, not stores:
+
+```typescript
+// composables/useSets.ts
+export const useSets = () => {
+	const setsStore = useSetsStore()
+
+	const fetchSets = async () => {
+		// useSupabaseClient() works here (composable has Nuxt context)
+		const supabase = useSupabaseClient()
+		const { data } = await supabase.from('user_set').select('set_data')
+		setsStore.sets = data?.map((set) => set.set_data) ?? []
+	}
+
+	return { fetchSets, sets: computed(() => setsStore.sets) }
+}
+
+// pages/index.vue
+const { sets, fetchSets } = useSets()
+await useAsyncData('sets', async () => {
+	await fetchSets() // Works on both server and client
+})
 ```
 
 ### 4. Components (UI Layer)
@@ -166,23 +234,37 @@ export const useToastStore = defineStore('toast', {
 })
 ```
 
-❌ **Calling Nuxt composables in store actions without checks**
+❌ **Calling Nuxt composables in store actions**
 
 ```typescript
-// ❌ BAD - May fail without context
+// ❌ BAD - Stores don't have Nuxt context
 async fetchData() {
-  const supabase = useSupabaseClient() // May fail!
+  const supabase = useSupabaseClient() // Fails on SSR!
 }
 ```
 
-✅ **Adding client-side checks**
+✅ **Move data fetching to composables**
 
 ```typescript
-// ✅ GOOD - Safe context check
-async fetchData() {
-  if (import.meta.server) return
-  const supabase = useSupabaseClient()
+// ✅ GOOD - Composables have Nuxt context
+// composables/useData.ts
+export const useData = () => {
+	const dataStore = useDataStore()
+
+	const fetchData = async () => {
+		const supabase = useSupabaseClient() // Works in composable!
+		const { data } = await supabase.from('table').select()
+		dataStore.items = data
+	}
+
+	return { fetchData, items: computed(() => dataStore.items) }
 }
+
+// pages/index.vue
+const { items, fetchData } = useData()
+await useAsyncData('data', async () => {
+	await fetchData() // Works on both server and client!
+})
 ```
 
 ## When to Use `useState`
@@ -204,17 +286,61 @@ Only use `useState` for:
 ```
 app/
 ├── stores/              # Pinia stores (framework-agnostic)
-│   ├── loader.ts
-│   ├── toast.ts
-│   ├── modal.ts
+│   ├── loader.ts        # State only, no Nuxt composables
+│   ├── toast.ts         # State only, no Nuxt composables
+│   ├── modal.ts         # State only, no Nuxt composables
+│   ├── sets.ts          # State + mutations (client-side only)
 │   └── ...
 ├── composables/         # Vue/Nuxt wrappers
 │   ├── useLoader.ts     # Wraps loader store
 │   ├── useToast.ts      # Wraps toast store
 │   ├── useModal.ts      # Wraps modal store
+│   ├── useSets.ts       # Wraps sets store + handles SSR fetching
 │   └── ...
 └── components/          # Vue components
     └── ...
+```
+
+## SSR Data Fetching Pattern
+
+**For data that needs SSR support:**
+
+1. ✅ Keep state in Pinia store (framework-agnostic)
+2. ✅ Move fetching logic to composable (has Nuxt context)
+3. ✅ Use `useAsyncData` in pages to fetch during SSR
+4. ✅ Composables can call `useSupabaseClient()` safely
+
+**Example:**
+
+```typescript
+// stores/sets.ts - State only
+export const useSetsStore = defineStore('sets', {
+	state: () => ({ sets: [] }),
+	actions: {
+		addSet(set) {
+			this.sets.push(set)
+		}, // Mutations OK
+	},
+})
+
+// composables/useSets.ts - Fetching logic
+export const useSets = () => {
+	const setsStore = useSetsStore()
+
+	const fetchSets = async () => {
+		const supabase = useSupabaseClient() // ✅ Works here
+		const { data } = await supabase.from('user_set').select()
+		setsStore.sets = data
+	}
+
+	return { sets: computed(() => setsStore.sets), fetchSets }
+}
+
+// pages/index.vue
+const { sets, fetchSets } = useSets()
+await useAsyncData('sets', async () => {
+	await fetchSets() // ✅ Works on server and client
+})
 ```
 
 ## Benefits
