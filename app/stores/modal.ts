@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 
-export type ModalType = 'create-set' | 'set-settings' | 'set-deletion' | null
+export type ModalType =
+	| 'create-set'
+	| 'set-settings'
+	| 'set-deletion'
+	| 'explanation'
+	| null
 
 export interface ModalState {
 	type: ModalType

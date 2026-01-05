@@ -32,14 +32,21 @@
 		</button>
 		<div
 			v-if="checkedAnswerIndex !== null"
-			class="absolute top-0 right-0 w-full h-full flex justify-center items-center bg-black/30"
+			class="absolute top-0 right-0 w-full h-full flex flex-col justify-center items-center bg-black/30"
 		>
 			<button
-				class="px-12 py-12 text-white font-bold rounded-lg shadow-xl shadow-purple-500/60 hover:shadow-purple-400/70 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all border-2 border-purple-400/50 flex items-center gap-4 text-4xl transform hover:scale-105 opacity-50 hover:opacity-100"
+				class="px-12 py-12 text-white font-bold rounded-lg shadow-xl shadow-purple-500/60 hover:shadow-purple-400/70 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all border-2 border-purple-400/50 flex items-center gap-4 text-4xl transform hover:scale-105 opacity-30 hover:opacity-100"
 				@click="nextFlashcard"
 			>
 				<span>NEXT</span>
 				<span class="text-3xl">➡️</span>
+			</button>
+			<button
+				class="px-7 py-6 mt-4 text-white font-bold rounded-lg shadow-xl shadow-purple-500/60 hover:shadow-purple-400/70 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all border-2 border-purple-400/50 flex items-center gap-4 text-xl transform hover:scale-105 opacity-30 hover:opacity-100"
+				@click="onShowExplanation"
+			>
+				<span>EXPLANATION</span>
+				<span class="text-3xl">💡</span>
 			</button>
 		</div>
 	</div>
@@ -135,5 +142,66 @@
 
 	const onStartAgain = () => {
 		window.location.reload()
+	}
+
+	const onShowExplanation = async () => {
+		const { startLoading, stopLoading } = useLoader()
+		const { error, success } = useToast()
+		const userStore = useUserStore()
+
+		startLoading('ai')
+		try {
+			const response = await fetch(
+				'https://api.groq.com/openai/v1/chat/completions',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${userStore.getUserAiApiKey}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						model: 'openai/gpt-oss-20b',
+						messages: [
+							{
+								role: 'user',
+								content: `
+									Explain why the answer is correct or incorrect in context of flashcard quiz named "${learningStore.setData?.name ?? '...'}" 
+									and described as "${learningStore.setData?.description ?? '...'}". 
+									Question was "${currentFlashcard.value?.question ?? '...'} and answers were "${currentFlashcard.value?.answers?.map((a) => a.text).join(', ') ?? '...'}". 
+									User picked answer "${currentFlashcard.value?.answers?.[checkedAnswerIndex.value ?? 0]?.text ?? '...'}". 
+									Use language same as the flashcard quiz. 
+									Format your response as clean HTML. Use:
+									- <strong> for bold text
+									- <em> for emphasis
+									- <p> for paragraphs
+									- <ul> and <li> for lists
+									- <table>, <thead>, <tbody>, <tr>, <th>, <td> for tables
+									- <code> for inline code
+									- <pre><code> for code blocks
+
+									Do not use markdown syntax. Return only HTML. Use language same as the flashcard quiz.
+									`,
+							},
+						],
+					}),
+				}
+			)
+
+			const data = await response.json()
+
+			currentFlashcard.value!.explanation =
+				data?.choices[0]?.message?.content
+
+			success('Explanation generated successfully!')
+		} catch (err) {
+			console.error('Fetch Error:', err)
+			error('Failed to connect to AI service')
+		} finally {
+			stopLoading()
+		}
+
+		useModalStore().openModal('explanation', {
+			flashcard: currentFlashcard.value,
+		})
 	}
 </script>

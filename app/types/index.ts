@@ -47,6 +47,7 @@ export interface Flashcard {
 	question?: string
 	answers?: Answer[]
 	status: 'success' | 'failure' | 'waiting'
+	explanation?: string | null
 }
 
 export interface SetData extends Set {

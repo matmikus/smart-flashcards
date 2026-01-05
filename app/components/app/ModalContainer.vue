@@ -25,14 +25,26 @@
 	>
 		<SetDeletion :set="set" />
 	</AppModal>
+
+	<AppModal
+		v-if="isExplanationOpen"
+		v-model="isExplanationOpen"
+		title="Explanation"
+		@update:model-value="closeModal"
+	>
+		<LearningExplanation :flashcard="flashcard" />
+	</AppModal>
 </template>
 
 <script setup lang="ts">
-	import type { Set } from '~/types'
+	import type { Set, Flashcard } from '~/types'
 
 	const { modalState, closeModal } = useModal()
 
 	const set = computed(() => modalState.value.props?.set as Set)
+	const flashcard = computed(
+		() => modalState.value.props?.flashcard as Flashcard
+	)
 
 	const isCreateSetOpen = computed({
 		get: () => modalState.value.type === 'create-set',
@@ -46,6 +58,11 @@
 
 	const isSetDeletionOpen = computed({
 		get: () => modalState.value.type === 'set-deletion',
+		set: () => closeModal(),
+	})
+
+	const isExplanationOpen = computed({
+		get: () => modalState.value.type === 'explanation',
 		set: () => closeModal(),
 	})
 </script>

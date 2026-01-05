@@ -23,7 +23,7 @@
 				>
 					<div
 						v-if="modelValue"
-						class="bg-slate-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto relative"
+						class="bg-slate-800 rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] overflow-y-auto relative"
 						@click.stop
 					>
 						<button
