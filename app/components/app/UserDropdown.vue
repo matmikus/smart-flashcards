@@ -13,6 +13,7 @@
 				<a
 					href="https://youtu.be/TTG7Uo8lS1M?si=R2oMcn6dwvPHx4sw"
 					target="_blank"
+					class="text-indigo-500 hover:text-indigo-400 transition-colors"
 					>[see youtube tutorial]</a
 				>
 			</div>

@@ -15,13 +15,22 @@ export const useSetsStore = defineStore('sets', {
 	},
 
 	actions: {
-		async addSet(name: string, items: string[]) {
+		async addSet({
+			name,
+			description,
+			items,
+		}: {
+			name: string
+			description: string
+			items: string[]
+		}) {
 			const { startLoading, stopLoading } = useLoader()
 
 			const id = crypto.randomUUID()
 			const setData = {
 				id: id,
 				name,
+				description,
 				topics: items,
 				color: Math.floor(Math.random() * cardColors.length),
 			}

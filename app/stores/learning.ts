@@ -77,7 +77,7 @@ export const useLearningStore = defineStore('learning', {
 								messages: [
 									{
 										role: 'user',
-										content: `Generate ABCD question and 4 answers (1 correct and 3 incorrect) about "${flashcard?.topic ?? '...'}"" in context of flashcard quiz named "${this.setData?.name ?? '...'}". Return only JSON object with properties "question" and "answers", where answers have just text items, and first one is correct, no other text in your response.`,
+										content: `Generate ABCD question and 4 answers (1 correct and 3 incorrect) about "${flashcard?.topic ?? '...'}"" in context of flashcard quiz named "${this.setData?.name ?? '...'}" and described as "${this.setData?.description ?? '...'}". Return only JSON object with properties "question" and "answers", where answers have just text items, and first one is correct, no other text in your response. Example question and answers for example topic "France": {"question": "What is the capital of France?", "answers": ["Paris", "London", "Berlin", "Madrid"]}`,
 									},
 								],
 							}),

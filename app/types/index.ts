@@ -24,6 +24,7 @@ export interface UserKey {
 export interface Set {
 	id: string
 	name: string
+	description: string
 	topics: string[]
 	color: number
 }

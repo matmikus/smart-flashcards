@@ -32,16 +32,41 @@
 		</button>
 		<div
 			v-if="checkedAnswerIndex !== null"
-			class="absolute top-0 right-0 w-full h-full flex justify-center items-center"
+			class="absolute top-0 right-0 w-full h-full flex justify-center items-center bg-black/30"
 		>
 			<button
-				class="h-[200px] text-white font-mono border border-white/10 rounded-md px-16 bg-indigo-950 text-[60px] opacity-50 hover:opacity-100 transition-opacity flex items-center justify-center"
+				class="px-12 py-12 text-white font-bold rounded-lg shadow-xl shadow-purple-500/60 hover:shadow-purple-400/70 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all border-2 border-purple-400/50 flex items-center gap-4 text-4xl transform hover:scale-105 opacity-50 hover:opacity-100"
 				@click="nextFlashcard"
 			>
-				<div>NEXT</div>
-				<div class="text-[60px] ml-8">➡️</div>
+				<span>NEXT</span>
+				<span class="text-3xl">➡️</span>
 			</button>
 		</div>
+	</div>
+	<div
+		v-else-if="isFinished"
+		:class="[
+			'p-4 rounded-md bg-slate-800 border-2 shadow-lg flex flex-col relative',
+			cardColor!.border,
+			cardColor!.shadow,
+		]"
+	>
+		<div class="text-white/70 text-center text-2xl mb-4">
+			You have finished the set !
+		</div>
+		<div class="text-white/70 text-[60px] text-center">🎉🏆👑💪🥳</div>
+		<button
+			class="w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white mt-4 mr-4 hover:bg-slate-700 transition-colors border border-white/10"
+			@click="onStartAgain"
+		>
+			START AGAIN
+		</button>
+		<button
+			class="w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white mt-4 mr-4 hover:bg-slate-700 transition-colors border border-white/10"
+			@click="navigateTo('/')"
+		>
+			GO TO SETS
+		</button>
 	</div>
 </template>
 
@@ -54,6 +79,12 @@
 
 	const currentFlashcard = ref<Flashcard | null>(null)
 	const checkedAnswerIndex = ref<number | null>(null)
+
+	const isFinished = computed(
+		() =>
+			(setData?.value?.flashcards?.filter((f) => f.status === 'success')
+				.length ?? 0) === (setData?.value?.flashcards?.length ?? -1)
+	)
 
 	// Use onMounted to ensure it runs after data is available
 	onMounted(async () => {
@@ -89,5 +120,9 @@
 		} else {
 			currentFlashcard.value = null
 		}
+	}
+
+	const onStartAgain = () => {
+		window.location.reload()
 	}
 </script>
