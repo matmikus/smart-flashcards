@@ -113,8 +113,19 @@
 		// Reset the answer state for the new flashcard
 		checkedAnswerIndex.value = null
 
-		// Get a new random flashcard (will generate question/answers if needed)
-		const flashcard = await learningStore.pickRandomFlashcard()
+		// Get a new random flashcard (will generate question/answers if needed) but not the same as the current one
+		let flashcard
+		const remainingFlashcards = learningStore.setData!.flashcards!.filter(
+			(f) => f.status !== 'success'
+		)
+
+		do {
+			flashcard = await learningStore.pickRandomFlashcard()
+		} while (
+			remainingFlashcards.length > 1 &&
+			flashcard?.id === currentFlashcard.value?.id
+		)
+
 		if (flashcard) {
 			currentFlashcard.value = flashcard
 		} else {
