@@ -76,8 +76,6 @@ export const useUserStore = defineStore('user', {
 					throw new Error('Cannot save API key on server side')
 				}
 
-				console.log('Calling Supabase upsert...')
-
 				const supabase = useSupabaseClient()
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -89,8 +87,6 @@ export const useUserStore = defineStore('user', {
 					console.error('Supabase error:', error)
 					throw error
 				}
-
-				console.log('API key saved successfully!')
 			} catch (err) {
 				console.error('Failed to save API key:', err)
 				// Revert local state on error

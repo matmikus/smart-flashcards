@@ -60,7 +60,6 @@ export const useSetsStore = defineStore('sets', {
 					throw error
 				}
 
-				console.log('Set saved successfully!')
 				useToast().success('Set saved successfully!')
 			} catch (err) {
 				console.error('Failed to save set:', err)
@@ -104,7 +103,6 @@ export const useSetsStore = defineStore('sets', {
 					throw error
 				}
 
-				console.log('Set updated successfully!')
 				useToast().success('Set updated successfully!')
 			} catch (err) {
 				console.error('Failed to updated set:', err)
@@ -136,7 +134,6 @@ export const useSetsStore = defineStore('sets', {
 					console.error('Supabase error:', error)
 					throw error
 				}
-				console.log('Set deleted successfully!')
 				useToast().success('Set deleted successfully!')
 			} catch (err) {
 				console.error('Failed to delete set:', err)

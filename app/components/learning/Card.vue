@@ -106,7 +106,6 @@
 
 	const checkAnswer = (index: number) => {
 		checkedAnswerIndex.value = index
-		console.log('checkedAnswerIndex', checkedAnswerIndex.value)
 		if (currentFlashcard.value?.answers?.[index]?.isCorrect) {
 			currentFlashcard.value!.status = 'success'
 		} else {

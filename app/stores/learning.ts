@@ -36,7 +36,6 @@ export const useLearningStore = defineStore('learning', {
 			}
 		},
 		async pickRandomFlashcard() {
-			console.log('pickRandomFlashcard')
 			const flashcards = this.getFlashcards?.filter(
 				(f) => f.status !== 'success'
 			)
@@ -89,7 +88,6 @@ export const useLearningStore = defineStore('learning', {
 					const content = JSON.parse(
 						data?.choices[0]?.message?.content ?? '{}'
 					)
-					console.log(content)
 
 					flashcard.question = content.question
 					flashcard.answers = content.answers
