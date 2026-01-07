@@ -29,10 +29,6 @@
 	const learningStore = useLearningStore()
 	const setData = computed(() => learningStore.getSetData)
 	const cardColor = computed(() => cardColors[setData?.value?.color ?? 0])
-	const passed = computed(
-		() =>
-			setData?.value?.flashcards?.filter((f) => f.status === 'success')
-				.length ?? 0
-	)
+	const passed = computed(() => learningStore.getPassedCount)
 	const attempts = computed(() => learningStore.attempts)
 </script>

@@ -36,22 +36,22 @@ Week 2: Frontend Components, State, SSR
 • Estimation: 4 hours
 • Concepts: Component design, TypeScript props/emits, reusable UI
 
-Task 5 – Smart Components
+√ Task 5 – Smart Components
 • Description: FlashcardSetDashboard, LearningMode, StatsPanel. Fetch data via composables and Pinia stores. Handle AI responses and post-submission explanations.
 • Estimation: 5 hours
 • Concepts: Composition API, smart/dumb components, reactive state, TypeScript
 
-Task 6 – Composables
+√ Task 6 – Composables
 • Description: useAuth(), useSets(), useFlashcards(), useAI(), useProgress(). Handle async API calls, AI generation, filtering, sorting.
 • Estimation: 5 hours
 • Concepts: Composables, reusable logic, async handling, AI integration
 
-Task 7 – Pinia Stores
+√ Task 7 – Pinia Stores
 • Description: Create stores for user, flashcard sets, flashcards, AI answers, and progress tracking. Include computed getters (learned/unlearned, progress percentage).
 • Estimation: 4 hours
 • Concepts: State management, computed properties, async actions, TypeScript
 
-Task 8 – SSR & Data Fetching
+√ Task 8 – SSR & Data Fetching
 • Description: Fetch flashcard sets, user data, progress stats. Implement loading states, error handling, caching.
 • Estimation: 3–4 hours
 • Concepts: SSR, async data fetching, reactive updates
@@ -60,42 +60,42 @@ Task 8 – SSR & Data Fetching
 
 Week 3: Backend, AI, Database Integration
 
-Task 9 – Database Setup
+√ Task 9 – Database Setup
 • Description: Install PostgreSQL (or SQLite for dev), configure Prisma ORM. Define schema: Users, Flashcard Sets, Flashcards, User Progress, AI Cache. Generate Prisma client.
 • Estimation: 2 hours
 • Concepts: Database setup, schema design, type-safe ORM
 
-Task 10 – User Authentication
+√ Task 10 – User Authentication
 • Description: Implement signup/login API endpoints. Hash passwords, generate JWTs. Connect frontend forms.
 • Estimation: 3–4 hours
 • Concepts: Authentication, secure storage, database CRUD, JWT
 
-Task 11 – CRUD Flashcard Sets
+√ Task 11 – CRUD Flashcard Sets
 • Description: API endpoints for creating, reading, updating, deleting sets. Connect frontend dashboard.
 • Estimation: 3 hours
 • Concepts: CRUD, relational modeling (user → sets), backend integration
 
-Task 12 – CRUD Flashcards
+√ Task 12 – CRUD Flashcards
 • Description: API endpoints to manage flashcards within sets. Store AI answers & explanations. Connect frontend forms and composables.
 • Estimation: 3 hours
 • Concepts: CRUD, relational modeling (set → flashcards), backend + frontend integration
 
-Task 13 – Track User Progress
+√ Task 13 – Track User Progress
 • Description: API endpoints to update progress per flashcard (correct/incorrect). Aggregate stats per set. Connect to Pinia store for reactive frontend updates.
 • Estimation: 2–3 hours
 • Concepts: Async DB updates, relational joins, analytics, reactive UI
 
-Task 14 – AI Integration
+√ Task 14 – AI Integration
 • Description: Generate multiple-choice answers per key-word (1 correct + distractors). After submission, provide AI-generated explanation. Cache responses in DB.
 • Estimation: 6 hours
 • Concepts: AI API integration, prompting, async handling, caching, reactive updates
 
-Task 15 – Teleport & Suspense
+√ Task 15 – Teleport & Suspense
 • Description: Teleport for modals (AI explanations). Suspense for async AI content with fallback UI.
 • Estimation: 2 hours
 • Concepts: Teleport, Suspense, async UI handling
 
-Task 16 – Performance Optimization
+√ Task 16 – Performance Optimization
 • Description: Lazy-load flashcards, memoize filtered/sorted sets, virtual scrolling for large sets. Optimize reactivity (shallowRef, markRaw).
 • Estimation: 4 hours
 • Concepts: Performance optimization, lazy-loading, reactivity caveats

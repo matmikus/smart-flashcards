@@ -87,11 +87,7 @@
 	const currentFlashcard = ref<Flashcard | null>(null)
 	const checkedAnswerIndex = ref<number | null>(null)
 
-	const isFinished = computed(
-		() =>
-			(setData?.value?.flashcards?.filter((f) => f.status === 'success')
-				.length ?? 0) === (setData?.value?.flashcards?.length ?? -1)
-	)
+	const isFinished = computed(() => learningStore.getIsFinished)
 
 	// Use onMounted to ensure it runs after data is available
 	onMounted(async () => {

@@ -15,6 +15,13 @@ export const useLearningStore = defineStore('learning', {
 		getSetId: (state) => state.setData?.id,
 		getSetColor: (state) => state.setData?.color,
 		getSetData: (state) => state.setData,
+		getPassedCount: (state) =>
+			state.setData?.flashcards?.filter((f) => f.status === 'success')
+				.length ?? 0,
+		getIsFinished: (state) =>
+			state.setData?.flashcards?.every((f) => f.status === 'success'),
+		getRemainingFlashcards: (state) =>
+			state.setData?.flashcards?.filter((f) => f.status !== 'success'),
 	},
 	actions: {
 		setCurrentSetData(id: string) {
@@ -36,9 +43,7 @@ export const useLearningStore = defineStore('learning', {
 			}
 		},
 		async pickRandomFlashcard() {
-			const flashcards = this.getFlashcards?.filter(
-				(f) => f.status !== 'success'
-			)
+			const flashcards = this.getRemainingFlashcards
 
 			if (flashcards && flashcards.length > 0) {
 				const randomIndex = Math.floor(
@@ -120,9 +125,14 @@ export const useLearningStore = defineStore('learning', {
 		},
 		updateFlashcard(flashcard: Flashcard) {
 			if (this.setData?.flashcards) {
-				this.setData.flashcards = this.setData.flashcards.map((f) =>
-					f.id === flashcard.id ? flashcard : f
+				// Find the index instead of mapping
+				const index = this.setData.flashcards.findIndex(
+					(f) => f.id === flashcard.id
 				)
+				if (index !== -1) {
+					// Update in place - Vue reactivity will detect the change
+					this.setData.flashcards[index] = flashcard
+				}
 			}
 		},
 		incrementAttempts() {
