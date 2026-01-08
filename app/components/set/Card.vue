@@ -1,7 +1,7 @@
 <template>
 	<div
 		:class="[
-			'p-4 rounded-md w-[200px] bg-slate-800 border-2 shadow-lg',
+			'p-4 rounded-md w-[200px] min-w-[200px] bg-slate-800 border-2 shadow-lg',
 			cardColor.border,
 			cardColor.shadow,
 		]"

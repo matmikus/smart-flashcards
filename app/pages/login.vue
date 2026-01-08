@@ -1,6 +1,9 @@
 <template>
-	<div class="max-w-md w-full">
-		<h1 class="font-bbh-bartle text-4xl mb-8 text-center">
+	<div class="max-w-md w-full m-2 p-2">
+		<h1
+			class="font-bbh-bartle mb-8 text-center"
+			style="font-size: clamp(1.5rem, 5vw, 2.25rem)"
+		>
 			SMART FLASHCARDS
 		</h1>
 		<div class="flex justify-between mb-8 gap-2">

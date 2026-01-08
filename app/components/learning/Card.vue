@@ -30,25 +30,6 @@
 		>
 			{{ item.text }}
 		</button>
-		<div
-			v-if="checkedAnswerIndex !== null"
-			class="absolute top-0 right-0 w-full h-full flex flex-col justify-center items-center bg-black/30"
-		>
-			<button
-				class="px-12 py-12 text-white font-bold rounded-lg shadow-xl shadow-purple-500/60 hover:shadow-purple-400/70 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all border-2 border-purple-400/50 flex items-center gap-4 text-4xl transform hover:scale-105 opacity-30 hover:opacity-100"
-				@click="nextFlashcard"
-			>
-				<span>NEXT</span>
-				<span class="text-3xl">➡️</span>
-			</button>
-			<button
-				class="px-7 py-6 mt-4 text-white font-bold rounded-lg shadow-xl shadow-purple-500/60 hover:shadow-purple-400/70 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all border-2 border-purple-400/50 flex items-center gap-4 text-xl transform hover:scale-105 opacity-30 hover:opacity-100"
-				@click="onShowExplanation"
-			>
-				<span>EXPLANATION</span>
-				<span class="text-3xl">💡</span>
-			</button>
-		</div>
 	</div>
 	<div
 		v-else-if="isFinished"
@@ -73,6 +54,25 @@
 			@click="navigateTo('/')"
 		>
 			GO TO SETS
+		</button>
+	</div>
+	<div
+		v-if="checkedAnswerIndex !== null"
+		class="w-full flex gap-2 items-center"
+	>
+		<button
+			class="h-[50px] mt-4 flex-1 min-w-0 px-4 text-white font-bold rounded-lg shadow-xl shadow-blue-500/60 bg-gradient-to-r from-blue-600 to-cyan-600 border-2 border-blue-400/50 flex items-center justify-center gap-2 text-xl"
+			@click="onShowExplanation"
+		>
+			<span>EXPLAIN</span>
+			<span class="text-3xl">💡</span>
+		</button>
+		<button
+			class="h-[50px] mt-4 flex-1 min-w-0 px-4 text-white font-bold rounded-lg shadow-xl shadow-green-500/60 bg-gradient-to-r from-green-600 to-emerald-600 border-2 border-green-400/50 flex items-center justify-center gap-2 text-xl"
+			@click="nextFlashcard"
+		>
+			<span>NEXT</span>
+			<span class="text-3xl">➡️</span>
 		</button>
 	</div>
 </template>

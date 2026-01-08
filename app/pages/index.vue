@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<div class="flex justify-between items-center mb-4">
+		<div class="flex justify-between items-center mb-4 w-full md:w-auto">
 			<h1
-				class="mb-4 text-white font-bold text-2xl drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+				class="mb-4 mr-4 text-white font-bold text-2xl drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
 			>
 				Your Sets
 			</h1>
@@ -13,7 +13,9 @@
 				Create New Set
 			</button>
 		</div>
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		<div
+			class="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+		>
 			<SetCard
 				v-for="(set, index) in sets"
 				:key="set.id"
