@@ -7,13 +7,15 @@
 				Your Sets
 			</h1>
 			<button
-				class="bg-slate-800 text-white p-2 rounded-md font-semibold shadow-lg shadow-purple-500/50 hover:shadow-purple-400/50 hover:bg-purple-400 transition-all border border-purple-400/50"
+				class="bg-slate-800 text-white p-2 rounded-md font-semibold shadow-lg shadow-purple-500/50 hover:shadow-purple-400/50 hover:bg-purple-400 transition-all border border-purple-400/50 focus:outline-none focus:ring-2 focus:ring-purple-400"
+				aria-label="Create a new flashcard set"
 				@click="createNewSet"
 			>
 				Create New Set
 			</button>
 		</div>
-		<div
+		<section
+			aria-label="Your flashcard sets"
 			class="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4"
 		>
 			<SetCard
@@ -22,8 +24,10 @@
 				:index="index"
 				:set="set"
 			/>
-			<div v-if="sets.length === 0">No sets found</div>
-		</div>
+			<p v-if="sets.length === 0" class="text-white/70">
+				No sets found. Create your first set to get started!
+			</p>
+		</section>
 	</div>
 </template>
 

@@ -1,8 +1,13 @@
 <template>
-	<div class="p-4 text-white">
+	<article class="p-4 text-white" aria-label="Explanation">
+		<h2 class="sr-only">Explanation</h2>
 		<!-- eslint-disable-next-line vue/no-v-html -->
-		<div class="explanation-content" v-html="flashcard?.explanation"></div>
-	</div>
+		<div
+			class="explanation-content"
+			aria-live="polite"
+			v-html="flashcard?.explanation"
+		></div>
+	</article>
 </template>
 
 <script setup lang="ts">

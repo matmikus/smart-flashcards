@@ -1,15 +1,21 @@
 <template>
 	<div
 		v-if="toast"
+		role="alert"
+		:aria-live="toast.type === 'error' ? 'assertive' : 'polite'"
+		:aria-atomic="true"
 		:class="[
 			'flex items-center gap-3 p-4 rounded-lg shadow-lg min-w-[300px] max-w-md',
 			toastClasses,
 		]"
 	>
-		<div class="flex-shrink-0 text-xl">{{ iconComponent }}</div>
+		<div class="flex-shrink-0 text-xl" aria-hidden="true">
+			{{ iconComponent }}
+		</div>
 		<p class="flex-1 font-medium">{{ toast.message }}</p>
 		<button
-			class="flex-shrink-0 text-current opacity-70 hover:opacity-100 transition-opacity"
+			class="flex-shrink-0 text-current opacity-70 hover:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-white rounded"
+			aria-label="Close notification"
 			@click="$emit('close')"
 		>
 			<svg
@@ -17,6 +23,7 @@
 				fill="none"
 				stroke="currentColor"
 				viewBox="0 0 24 24"
+				aria-hidden="true"
 			>
 				<path
 					stroke-linecap="round"
@@ -25,6 +32,7 @@
 					d="M6 18L18 6M6 6l12 12"
 				/>
 			</svg>
+			<span class="sr-only">Close</span>
 		</button>
 	</div>
 </template>

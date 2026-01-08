@@ -1,80 +1,114 @@
 <template>
-	<div
+	<article
 		v-if="currentFlashcard"
 		:class="[
 			'p-4 rounded-md bg-slate-800 border-2 shadow-lg flex flex-col relative',
 			cardColor!.border,
 			cardColor!.shadow,
 		]"
+		aria-label="Flashcard question"
 	>
-		<div class="text-white/70 mb-4">{{ currentFlashcard?.topic }}</div>
-		<div class="mb-4">{{ currentFlashcard?.question }}</div>
-		<button
-			v-for="(item, index) in currentFlashcard?.answers"
-			:key="index"
-			class="backdrop-blur-sm mt-4 mr-4 transition-colors border border-white/10 w-full p-2 rounded-md shadow-lg transition-all font-mono"
-			:disabled="checkedAnswerIndex !== null"
-			:class="[
-				checkedAnswerIndex === index
-					? item.isCorrect
-						? 'bg-green-500'
-						: 'bg-red-500'
-					: 'bg-slate-700/50 hover:bg-slate-700',
-				checkedAnswerIndex !== null &&
-				checkedAnswerIndex !== index &&
-				item.isCorrect
-					? 'text-green-500'
-					: 'text-white',
-			]"
-			@click="checkAnswer(index)"
-		>
-			{{ item.text }}
-		</button>
-	</div>
-	<div
+		<div class="text-white/70 mb-4" aria-label="Topic">
+			{{ currentFlashcard?.topic }}
+		</div>
+		<h2 class="mb-4 text-white font-semibold">
+			{{ currentFlashcard?.question }}
+		</h2>
+		<section aria-label="Answer options" role="radiogroup">
+			<button
+				v-for="(item, index) in currentFlashcard?.answers"
+				:key="index"
+				role="radio"
+				:aria-checked="checkedAnswerIndex === index ? 'true' : 'false'"
+				:aria-label="`Answer option ${index + 1}: ${item.text}`"
+				:aria-disabled="checkedAnswerIndex !== null"
+				class="backdrop-blur-sm mt-4 mr-4 transition-colors border border-white/10 w-full p-2 rounded-md shadow-lg transition-all font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+				:disabled="checkedAnswerIndex !== null"
+				:class="[
+					checkedAnswerIndex === index
+						? item.isCorrect
+							? 'bg-green-500'
+							: 'bg-red-500'
+						: 'bg-slate-700/50 hover:bg-slate-700',
+					checkedAnswerIndex !== null &&
+					checkedAnswerIndex !== index &&
+					item.isCorrect
+						? 'text-green-500'
+						: 'text-white',
+				]"
+				@click="checkAnswer(index)"
+				@keydown.enter="checkAnswer(index)"
+				@keydown.space.prevent="checkAnswer(index)"
+			>
+				{{ item.text }}
+			</button>
+		</section>
+
+		<!-- Screen reader announcement for answer result -->
+		<div aria-live="polite" aria-atomic="true" class="sr-only">
+			<span v-if="checkedAnswerIndex !== null">
+				{{
+					currentFlashcard?.answers?.[checkedAnswerIndex]?.isCorrect
+						? 'Correct answer selected.'
+						: 'Incorrect answer selected.'
+				}}
+			</span>
+		</div>
+	</article>
+	<article
 		v-else-if="isFinished"
 		:class="[
 			'p-4 rounded-md bg-slate-800 border-2 shadow-lg flex flex-col relative',
 			cardColor!.border,
 			cardColor!.shadow,
 		]"
+		aria-label="Set completed"
 	>
-		<div class="text-white/70 text-center text-2xl mb-4">
+		<h2 class="text-white/70 text-center text-2xl mb-4">
 			You have finished the set !
+		</h2>
+		<div class="text-white/70 text-[60px] text-center" aria-hidden="true">
+			🎉🏆👑💪🥳
 		</div>
-		<div class="text-white/70 text-[60px] text-center">🎉🏆👑💪🥳</div>
 		<button
-			class="w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white mt-4 mr-4 hover:bg-slate-700 transition-colors border border-white/10"
+			class="w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white mt-4 mr-4 hover:bg-slate-700 transition-colors border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+			aria-label="Start learning this set again"
 			@click="onStartAgain"
 		>
 			START AGAIN
 		</button>
 		<button
-			class="w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white mt-4 mr-4 hover:bg-slate-700 transition-colors border border-white/10"
+			class="w-full p-2 rounded-md bg-slate-700/50 backdrop-blur-sm text-white mt-4 mr-4 hover:bg-slate-700 transition-colors border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+			aria-label="Go back to sets list"
 			@click="navigateTo('/')"
 		>
 			GO TO SETS
 		</button>
-	</div>
-	<div
+	</article>
+	<section
 		v-if="checkedAnswerIndex !== null"
 		class="w-full flex gap-2 items-center"
+		aria-label="Answer actions"
 	>
 		<button
-			class="h-[50px] mt-4 flex-1 min-w-0 px-4 text-white font-bold rounded-lg shadow-xl shadow-blue-500/60 bg-gradient-to-r from-blue-600 to-cyan-600 border-2 border-blue-400/50 flex items-center justify-center gap-2 text-xl"
+			class="h-[50px] mt-4 flex-1 min-w-0 px-4 text-white font-bold rounded-lg shadow-xl shadow-blue-500/60 bg-gradient-to-r from-blue-600 to-cyan-600 border-2 border-blue-400/50 flex items-center justify-center gap-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+			aria-label="Show explanation for this answer"
 			@click="onShowExplanation"
+			@keydown.enter="onShowExplanation"
 		>
 			<span>EXPLAIN</span>
-			<span class="text-3xl">💡</span>
+			<span class="text-3xl" aria-hidden="true">💡</span>
 		</button>
 		<button
-			class="h-[50px] mt-4 flex-1 min-w-0 px-4 text-white font-bold rounded-lg shadow-xl shadow-green-500/60 bg-gradient-to-r from-green-600 to-emerald-600 border-2 border-green-400/50 flex items-center justify-center gap-2 text-xl"
+			class="h-[50px] mt-4 flex-1 min-w-0 px-4 text-white font-bold rounded-lg shadow-xl shadow-green-500/60 bg-gradient-to-r from-green-600 to-emerald-600 border-2 border-green-400/50 flex items-center justify-center gap-2 text-xl focus:outline-none focus:ring-2 focus:ring-green-400"
+			aria-label="Go to next flashcard"
 			@click="nextFlashcard"
+			@keydown.enter="nextFlashcard"
 		>
 			<span>NEXT</span>
-			<span class="text-3xl">➡️</span>
+			<span class="text-3xl" aria-hidden="true">➡️</span>
 		</button>
-	</div>
+	</section>
 </template>
 
 <script setup lang="ts">
@@ -101,6 +135,7 @@
 	})
 
 	const checkAnswer = (index: number) => {
+		if (checkedAnswerIndex.value !== null) return
 		checkedAnswerIndex.value = index
 		if (currentFlashcard.value?.answers?.[index]?.isCorrect) {
 			currentFlashcard.value!.status = 'success'
@@ -110,6 +145,51 @@
 		learningStore.updateFlashcard(currentFlashcard.value!)
 		learningStore.incrementAttempts()
 	}
+
+	// Keyboard navigation for answer selection
+	const handleKeydown = (e: KeyboardEvent) => {
+		if (!currentFlashcard.value?.answers) return
+
+		const answers = currentFlashcard.value.answers
+		const currentIndex =
+			checkedAnswerIndex.value !== null ? checkedAnswerIndex.value : -1
+
+		if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+			e.preventDefault()
+			const nextIndex =
+				currentIndex < answers.length - 1 ? currentIndex + 1 : 0
+			const nextButton = document.querySelector(
+				`[aria-label*="Answer option ${nextIndex + 1}"]`
+			) as HTMLElement
+			nextButton?.focus()
+		} else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+			e.preventDefault()
+			const prevIndex =
+				currentIndex > 0 ? currentIndex - 1 : answers.length - 1
+			const prevButton = document.querySelector(
+				`[aria-label*="Answer option ${prevIndex + 1}"]`
+			) as HTMLElement
+			prevButton?.focus()
+		} else if (e.key === 'e' || e.key === 'E') {
+			if (checkedAnswerIndex.value !== null) {
+				e.preventDefault()
+				onShowExplanation()
+			}
+		} else if (e.key === 'n' || e.key === 'N') {
+			if (checkedAnswerIndex.value !== null) {
+				e.preventDefault()
+				nextFlashcard()
+			}
+		}
+	}
+
+	onMounted(() => {
+		window.addEventListener('keydown', handleKeydown)
+	})
+
+	onUnmounted(() => {
+		window.removeEventListener('keydown', handleKeydown)
+	})
 
 	const nextFlashcard = async () => {
 		// Reset the answer state for the new flashcard

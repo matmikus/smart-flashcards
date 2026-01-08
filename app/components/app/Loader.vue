@@ -2,6 +2,9 @@
 	<Teleport to="body">
 		<div
 			v-if="isLoading"
+			role="status"
+			aria-live="polite"
+			aria-busy="true"
 			class="fixed inset-0 z-[200] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
 		>
 			<div
@@ -14,13 +17,23 @@
 					<div
 						v-if="['fetch', 'save'].includes(loaderType || '')"
 						class="w-12 h-12 border-4 border-[#A855F7] border-t-transparent rounded-full animate-spin"
+						aria-hidden="true"
 					/>
 					<!-- AI Loader (Custom Animation) -->
-					<div v-else-if="loaderType === 'ai'" class="loader" />
+					<div
+						v-else-if="loaderType === 'ai'"
+						class="loader"
+						aria-hidden="true"
+					/>
 					<!-- Message -->
-					<p v-if="message" class="text-white font-semibold text-lg">
+					<p
+						v-if="message"
+						class="text-white font-semibold text-lg"
+						aria-live="polite"
+					>
 						{{ message }}
 					</p>
+					<span v-else class="sr-only">Loading...</span>
 				</div>
 			</div>
 		</div>
