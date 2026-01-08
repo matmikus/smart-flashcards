@@ -1,41 +1,29 @@
 <template>
 	<Teleport to="body">
-		<Transition
-			enter-active-class="transition-opacity duration-200"
-			enter-from-class="opacity-0"
-			enter-to-class="opacity-100"
-			leave-active-class="transition-opacity duration-200"
-			leave-from-class="opacity-100"
-			leave-to-class="opacity-0"
+		<div
+			v-if="isLoading"
+			class="fixed inset-0 z-[200] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
 		>
 			<div
-				v-if="isLoading"
-				class="fixed inset-0 z-[200] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+				class="bg-slate-800 rounded-lg p-8 shadow-xl border border-slate-700"
 			>
 				<div
-					class="bg-slate-800 rounded-lg p-8 shadow-xl border border-slate-700"
+					class="flex flex-col items-center gap-4 justify-between h-[110px]"
 				>
+					<!-- Fetch Loader (Spinner) -->
 					<div
-						class="flex flex-col items-center gap-4 justify-between h-[110px]"
-					>
-						<!-- Fetch Loader (Spinner) -->
-						<div
-							v-if="['fetch', 'save'].includes(loaderType || '')"
-							class="w-12 h-12 border-4 border-[#A855F7] border-t-transparent rounded-full animate-spin"
-						/>
-						<!-- AI Loader (Custom Animation) -->
-						<div v-else-if="loaderType === 'ai'" class="loader" />
-						<!-- Message -->
-						<p
-							v-if="message"
-							class="text-white font-semibold text-lg"
-						>
-							{{ message }}
-						</p>
-					</div>
+						v-if="['fetch', 'save'].includes(loaderType || '')"
+						class="w-12 h-12 border-4 border-[#A855F7] border-t-transparent rounded-full animate-spin"
+					/>
+					<!-- AI Loader (Custom Animation) -->
+					<div v-else-if="loaderType === 'ai'" class="loader" />
+					<!-- Message -->
+					<p v-if="message" class="text-white font-semibold text-lg">
+						{{ message }}
+					</p>
 				</div>
 			</div>
-		</Transition>
+		</div>
 	</Teleport>
 </template>
 
