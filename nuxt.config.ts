@@ -34,31 +34,6 @@ export default defineNuxtConfig({
 			},
 		},
 		build: {
-			// Code splitting optimizations
-			rollupOptions: {
-				output: {
-					// Manual chunk splitting for better caching
-					manualChunks: (id) => {
-						// Vendor chunks
-						if (id.includes('node_modules')) {
-							if (
-								id.includes('vue') ||
-								id.includes('vue-router')
-							) {
-								return 'vue-vendor'
-							}
-							if (id.includes('@nuxt')) {
-								return 'nuxt-vendor'
-							}
-							// Large libraries get their own chunk
-							if (id.includes('groq') || id.includes('axios')) {
-								return 'api-vendor'
-							}
-							return 'vendor'
-						}
-					},
-				},
-			},
 			// Minification
 			minify: 'terser',
 			terserOptions: {
