@@ -57,10 +57,6 @@ export default defineNuxtConfig({
 							return 'vendor'
 						}
 					},
-					// Optimize chunk file names for better caching
-					chunkFileNames: 'js/[name]-[hash].js',
-					entryFileNames: 'js/[name]-[hash].js',
-					assetFileNames: 'assets/[name]-[hash].[ext]',
 				},
 			},
 			// Minification
