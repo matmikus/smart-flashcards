@@ -4,12 +4,55 @@ import { useUserStore } from '~/stores/user'
 import { useLoader } from '~/composables/useLoader'
 import { useToast } from '~/composables/useToast'
 
+const STORAGE_KEY = 'learning-store'
+
+// Helper functions for localStorage (client-side only)
+const saveToLocalStorage = (data: {
+	setData: SetData | null
+	attempts: number
+}) => {
+	if (import.meta.client && typeof window !== 'undefined') {
+		try {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+		} catch (error) {
+			console.error(
+				'Failed to save learning store to localStorage:',
+				error
+			)
+		}
+	}
+}
+
+const loadFromLocalStorage = (): {
+	setData: SetData | null
+	attempts: number
+} | null => {
+	if (import.meta.client && typeof window !== 'undefined') {
+		try {
+			const stored = localStorage.getItem(STORAGE_KEY)
+			if (stored) {
+				return JSON.parse(stored)
+			}
+		} catch (error) {
+			console.error(
+				'Failed to load learning store from localStorage:',
+				error
+			)
+		}
+	}
+	return null
+}
+
 export const useLearningStore = defineStore('learning', {
-	state: () => ({
-		setData: null as SetData | null,
-		isGeneratingFlashcard: false,
-		attempts: 0,
-	}),
+	state: () => {
+		// Try to restore from localStorage on initialization
+		const restored = loadFromLocalStorage()
+		return {
+			setData: restored?.setData ?? null,
+			isGeneratingFlashcard: false,
+			attempts: restored?.attempts ?? 0,
+		}
+	},
 	getters: {
 		getFlashcards: (state) => state.setData?.flashcards,
 		getSetId: (state) => state.setData?.id,
@@ -25,8 +68,31 @@ export const useLearningStore = defineStore('learning', {
 	},
 	actions: {
 		setCurrentSetData(id: string) {
+			// Only run on client-side to prevent SSR from clearing localStorage
+			if (import.meta.server) {
+				return
+			}
+
 			const data = useSetsStore().getSetDetails(id)
 			if (data) {
+				// Check if we already have data for this set (from localStorage restoration)
+				if (this.setData?.id === id) {
+					// Already restored, don't overwrite
+					return
+				}
+
+				// Check if we have saved progress for this set in localStorage
+				const restored = loadFromLocalStorage()
+				if (restored?.setData?.id === id && restored.setData) {
+					// Restore saved progress for this set
+					this.setData = restored.setData
+					this.attempts = restored.attempts
+					// Don't save here - let the subscription handle it to avoid overwriting
+					return
+				}
+
+				// Only initialize new set if we don't have saved data
+				// Initialize new set
 				this.setData = {
 					...data,
 					flashcards: data.topics.map(
@@ -38,11 +104,12 @@ export const useLearningStore = defineStore('learning', {
 						})
 					),
 				}
-
 				this.attempts = 0
+				// Save after initializing new set
+				this.saveToStorage()
 			}
 		},
-		async pickRandomFlashcard() {
+		async pickRandomFlashcard(): Promise<Flashcard | null> {
 			const flashcards = this.getRemainingFlashcards
 
 			if (flashcards && flashcards.length > 0) {
@@ -118,7 +185,9 @@ export const useLearningStore = defineStore('learning', {
 				} catch (err) {
 					console.error('Fetch Error:', err)
 					error('Failed to connect to AI service')
-					this.pickRandomFlashcard()
+					stopLoading()
+					this.isGeneratingFlashcard = false
+					return await this.pickRandomFlashcard()
 				}
 			}
 			return null
@@ -132,11 +201,31 @@ export const useLearningStore = defineStore('learning', {
 				if (index !== -1) {
 					// Update in place - Vue reactivity will detect the change
 					this.setData.flashcards[index] = flashcard
+					if (this.getIsFinished) {
+						this.clearStorage()
+					}
+					// Save after update
+					this.saveToStorage()
 				}
 			}
 		},
 		incrementAttempts() {
 			this.attempts++
+			// Save after increment
+			this.saveToStorage()
+		},
+		saveToStorage() {
+			// Save setData and attempts to localStorage
+			saveToLocalStorage({
+				setData: this.setData,
+				attempts: this.attempts,
+			})
+		},
+		clearStorage() {
+			// Clear localStorage (useful when starting a new set)
+			if (import.meta.client && typeof window !== 'undefined') {
+				localStorage.removeItem(STORAGE_KEY)
+			}
 		},
 	},
 })

@@ -16,11 +16,17 @@
 		return { fetched: true }
 	})
 
-	// Initialize learning store with the set data (works on both server and client)
+	// Initialize learning store with the set data (client-side only to preserve localStorage)
 	await useAsyncData(`learn-${route.params.id}`, async () => {
-		const id = route.params.id
-		if (id && typeof id === 'string') {
-			learningStore.setCurrentSetData(id)
+		// Only run on client-side to prevent SSR from clearing localStorage
+		if (import.meta.client) {
+			const id = route.params.id
+			if (id && typeof id === 'string') {
+				// Only set if we don't already have data for this set (might be restored from localStorage)
+				if (learningStore.setData?.id !== id) {
+					learningStore.setCurrentSetData(id)
+				}
+			}
 		}
 		return { initialized: true }
 	})
