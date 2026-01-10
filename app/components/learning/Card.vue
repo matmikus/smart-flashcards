@@ -244,7 +244,7 @@
 									and described as "${learningStore.setData?.description ?? '...'}". 
 									Question was "${currentFlashcard.value?.question ?? '...'} and answers were "${currentFlashcard.value?.answers?.map((a) => a.text).join(', ') ?? '...'}". 
 									User picked answer "${currentFlashcard.value?.answers?.[checkedAnswerIndex.value ?? 0]?.text ?? '...'}". 
-									Use language same as the flashcard quiz. 
+									Use language same as the language of the flashcard quiz question and answers! 
 									Format your response as clean HTML. Use:
 									- <strong> for bold text
 									- <em> for emphasis
@@ -253,8 +253,9 @@
 									- <table>, <thead>, <tbody>, <tr>, <th>, <td> for tables
 									- <code> for inline code
 									- <pre><code> for code blocks
+									- use some empty lines inside to make it more readable
 
-									Do not use markdown syntax. Return only HTML. Use language same as the flashcard quiz.
+									Do not use markdown syntax. Return only HTML. Be like a teacher explaining the answer to a student, wanted to help them understand the topic better.
 									`,
 							},
 						],
