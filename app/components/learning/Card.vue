@@ -221,57 +221,28 @@
 
 	const onShowExplanation = async () => {
 		const { startLoading, stopLoading } = useLoader()
-		const { error, success } = useToast()
-		const userStore = useUserStore()
+		const { success } = useToast()
+		const { generateExplanation } = useAI()
 
 		startLoading('ai')
 		try {
-			const response = await fetch(
-				'https://api.groq.com/openai/v1/chat/completions',
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${userStore.getUserAiApiKey}`,
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						model: 'openai/gpt-oss-20b',
-						messages: [
-							{
-								role: 'user',
-								content: `
-									Explain why the answer is correct or incorrect in context of flashcard quiz named "${learningStore.setData?.name ?? '...'}" 
-									and described as "${learningStore.setData?.description ?? '...'}". 
-									Question was "${currentFlashcard.value?.question ?? '...'} and answers were "${currentFlashcard.value?.answers?.map((a) => a.text).join(', ') ?? '...'}". 
-									User picked answer "${currentFlashcard.value?.answers?.[checkedAnswerIndex.value ?? 0]?.text ?? '...'}". 
-									Use language same as the language of the flashcard quiz question and answers! 
-									Format your response as clean HTML. Use:
-									- <strong> for bold text
-									- <em> for emphasis
-									- <p> for paragraphs
-									- <ul> and <li> for lists
-									- <table>, <thead>, <tbody>, <tr>, <th>, <td> for tables
-									- <code> for inline code
-									- <pre><code> for code blocks
-									- use some empty lines inside to make it more readable
+			const explanation = await generateExplanation({
+				setName: learningStore.setData?.name ?? '...',
+				setDescription: learningStore.setData?.description ?? '...',
+				question: currentFlashcard.value?.question ?? '...',
+				answers:
+					currentFlashcard.value?.answers?.map((a) => a.text) ?? [],
+				selectedAnswer:
+					currentFlashcard.value?.answers?.[
+						checkedAnswerIndex.value ?? 0
+					]?.text ?? '...',
+			})
 
-									Do not use markdown syntax. Return only HTML. Be like a teacher explaining the answer to a student, wanted to help them understand the topic better.
-									`,
-							},
-						],
-					}),
-				}
-			)
-
-			const data = await response.json()
-
-			currentFlashcard.value!.explanation =
-				data?.choices[0]?.message?.content
+			currentFlashcard.value!.explanation = explanation
 
 			success('Explanation generated successfully!')
-		} catch (err) {
-			console.error('Fetch Error:', err)
-			error('Failed to connect to AI service')
+		} catch {
+			// Error already handled in composable
 		} finally {
 			stopLoading()
 		}

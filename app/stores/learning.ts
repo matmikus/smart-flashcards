@@ -1,6 +1,5 @@
 import type { Answer, Flashcard, SetData } from '~/types'
 import { defineStore } from 'pinia'
-import { useUserStore } from '~/stores/user'
 import { useLoader } from '~/composables/useLoader'
 import { useToast } from '~/composables/useToast'
 
@@ -129,40 +128,20 @@ export const useLearningStore = defineStore('learning', {
 				}
 
 				const { startLoading, stopLoading } = useLoader()
-				const { error, success } = useToast()
-				const userStore = useUserStore()
+				const { success } = useToast()
+				const { generateFlashcard: generateFlashcardAI } = useAI()
 
 				try {
 					startLoading('ai')
 
-					const response = await fetch(
-						'https://api.groq.com/openai/v1/chat/completions',
-						{
-							method: 'POST',
-							headers: {
-								Authorization: `Bearer ${userStore.getUserAiApiKey}`,
-								'Content-Type': 'application/json',
-							},
-							body: JSON.stringify({
-								model: 'openai/gpt-oss-20b',
-								messages: [
-									{
-										role: 'user',
-										content: `Generate ABCD question and 4 answers (1 correct and 3 incorrect) about "${flashcard?.topic ?? '...'}"" in context of flashcard quiz named "${this.setData?.name ?? '...'}" and described as "${this.setData?.description ?? '...'}". Try to think like a teacher or recruiter, trying to verify if the student/interviewer knows the topic. Return only JSON object with properties "question" and "answers", where answers have just text items, and first one is correct, no other text in your response. Example question and answers for example topic "France": {"question": "What is the capital of France?", "answers": ["Paris", "London", "Berlin", "Madrid"]}`,
-									},
-								],
-							}),
-						}
-					)
+					const result = await generateFlashcardAI({
+						topic: flashcard?.topic ?? '...',
+						setName: this.setData?.name ?? '...',
+						setDescription: this.setData?.description ?? '...',
+					})
 
-					const data = await response.json()
-
-					const content = JSON.parse(
-						data?.choices[0]?.message?.content ?? '{}'
-					)
-
-					flashcard.question = content.question
-					flashcard.answers = content.answers
+					flashcard.question = result.question
+					flashcard.answers = result.answers
 						.map(
 							(answer: string, index: number): Answer => ({
 								id: crypto.randomUUID(),
@@ -182,9 +161,8 @@ export const useLearningStore = defineStore('learning', {
 					this.isGeneratingFlashcard = false
 
 					return flashcard
-				} catch (err) {
-					console.error('Fetch Error:', err)
-					error('Failed to connect to AI service')
+				} catch {
+					// Error already handled in composable
 					stopLoading()
 					this.isGeneratingFlashcard = false
 					return await this.pickRandomFlashcard()
