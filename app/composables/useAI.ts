@@ -81,7 +81,7 @@ export const useAI = () => {
 		setName: string
 		setDescription: string
 	}): Promise<{ question: string; answers: string[] }> => {
-		const prompt = `Generate ABCD question and 4 answers (1 correct and 3 incorrect) about "${params.topic}" in context of flashcard quiz named "${params.setName}" and described as "${params.setDescription}". Try to think like a teacher or recruiter, trying to verify if the student/interviewer knows the topic. Return only JSON object with properties "question" and "answers", where answers have just text items, and first one is correct, no other text in your response. Example question and answers for example topic "France": {"question": "What is the capital of France?", "answers": ["Paris", "London", "Berlin", "Madrid"]}`
+		const prompt = `Generate ABCD question and 4 answers (1 correct and 3 incorrect, all answers must have more less same character size) about "${params.topic}" in context of flashcard quiz named "${params.setName}" and described as "${params.setDescription}". Try to think like a teacher or recruiter, trying to verify if the student/interviewer knows the topic. Return only JSON object with properties "question" and "answers", where answers have just text items, and first one is correct, no other text in your response. Example question and answers for example topic "France": {"question": "What is the capital of France?", "answers": ["Paris", "London", "Berlin", "Madrid"]}`
 
 		const content = await generateTextWithAI(prompt)
 		const parsed = JSON.parse(content || '{}')
